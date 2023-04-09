@@ -1,10 +1,20 @@
 import "./App.css";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./sharedComponent/login";
+
 
 function App() {
   return (
-    <div className="App">
-      <h1 className="text-3xl font-bold underline text-red-500">Hello world!</h1>
-    </div>
+    <BrowserRouter>
+    <Routes>
+    <Route path="/login" exact element={<Login/>} />
+    </Routes>
+    </BrowserRouter>
   );
 }
 
