@@ -1,18 +1,14 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import login from "../images/login.jpg";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -35,91 +31,112 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+  const initialValues = {
+    email: "",
+    password: "",
+  
+  };
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Invalid email address").required("Required"),
+    password: Yup.string().required("Required"),
+  });
+
+  const onSubmit = (values) => {
+    console.log(values.email);
+    const responses = axios
+
+    .post(
+      `http://localhost:8020/user/login`,
+      {
+        
+       
+        email:values.email,
+        password:values.password,
+
+      },
+      
+    )
+    .then((response) => {
+      alert("user logged")
     });
   };
 
   return (
-    <section className="flex h-screen">
+    <section className="flex  h-screen">
       <div className="w-2/3">
         <img className="h-screen" src={login} alt="Login image" />
       </div>
       <div className="w-1/3 ">
-        <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{ mt: 1 }}
-              >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
-                <Button
+        <div className="p-10">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({ errors, touched }) => (
+              <Form>
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Email</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="email"
+                      name="email"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="email"
+                  />
+                </div>
+
+                <div className="flex-col">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Password</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
+                      type="password"
+                      name="password"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs italic"
+                    name="password"
+                  />
+                </div>
+
+                <button
+                  className="bg-black text-white w-full py-2 mt-2 hover:bg-white hover:text-black border-2
+                "
                   type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
-                </Button>
-                <Grid container>
-                  <Grid item xs>
-                    
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
-                </Grid>
-              </Box>
-            </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
-          </Container>
-        </ThemeProvider>
+                  Login
+                </button>
+                <div className="text-center mt-3">
+                  <a
+                    href="/register"
+                    variant="body2"
+                    className="text-black underline"
+                  >
+                    {"Don't have an account? Sign Up"}
+                  </a>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </section>
   );
