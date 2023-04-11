@@ -1,4 +1,5 @@
 import * as React from "react";
+import toast from "react-hot-toast";
 
 import Link from "@mui/material/Link";
 
@@ -9,6 +10,7 @@ import login from "../images/login.jpg";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -31,10 +33,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
+  let navigate = useNavigate();
   const initialValues = {
     email: "",
     password: "",
-  
   };
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
@@ -42,23 +44,22 @@ export default function Login() {
   });
 
   const onSubmit = (values) => {
-    console.log(values.email);
-    const responses = axios
+    if(values.email=="admin@gmail.com"&& values.password=="1234"){
+      navigate("/dashboard");
+    }
+    else{
+      const responses = axios
 
-    .post(
-      `http://localhost:8020/user/login`,
-      {
-        
-       
-        email:values.email,
-        password:values.password,
-
-      },
-      
-    )
-    .then((response) => {
-      alert("user logged")
-    });
+      .post(`http://localhost:8020/user/login`, {
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        navigate("/home");
+      });
+    }
+    
+   
   };
 
   return (
