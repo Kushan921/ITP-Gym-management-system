@@ -89,7 +89,7 @@ router.route("/login").post((req, res) => {
         } else {
             // Check password
             if (password === user.password) {
-                res.json(user);
+                res.send(user);
                 
             } else {
                 return res.status(400).json({password: "Password incorrect"});
