@@ -1,8 +1,11 @@
 import { useState } from "react";
+import Instructor from "./instructor";
+import { useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("home");
+  let navigate = useNavigate();
   return (
     <div className="flex">
       <div
@@ -128,7 +131,9 @@ export default function Sidebar() {
               </li> */}
               <li className="rounded-sm">
                 <button
-                  href="#"
+                 onClick={()=>{
+                    navigate("/login");
+                 }}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
                   <svg
@@ -152,7 +157,7 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto mt-12 p-10">
+      <div className="container mx-auto">
         {selectedField === "home" ? (
           <div className="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
             <div className="w-full px-4 py-5 bg-white rounded-lg shadow">
@@ -182,9 +187,7 @@ export default function Sidebar() {
           </div>
         ) : null}
         {selectedField === "instructors" ? (
-          <div>
-            <h1>edc</h1>
-          </div>
+          <Instructor/>
         ) : null}
       </div>
     </div>
