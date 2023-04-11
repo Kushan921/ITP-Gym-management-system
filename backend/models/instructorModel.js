@@ -1,13 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-    name : {
+const InstructorSchema = new Schema({
+    first_name : {
         type : String,
         required: true
     },
+    last_name : {
+        type : String,
+        required : true
+    },
     age : {
-        type : Number,
+        type : String,
         required : true
     },
     gender : {
@@ -30,6 +34,6 @@ const UserSchema = new Schema({
 
 })
 
-//user table and path
-const User = mongoose.model("user",UserSchema);
-module.exports = User;
+//instructor table and path
+const Instructor = mongoose.model("instructor",InstructorSchema);
+module.exports = Instructor;

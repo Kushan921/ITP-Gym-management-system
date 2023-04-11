@@ -35,6 +35,9 @@ connection.once("open",()=>{
 const userRouter = require("./routes/userRoute");
 app.use("/user",userRouter);
 
+//instructor
+const instructorRouter = require("./routes/instructorRoute");
+app.use("/instructor",instructorRouter);
 
 //run the app using portd
 app.listen(PORT, () =>{
