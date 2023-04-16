@@ -2,6 +2,7 @@ import { useState } from "react";
 import Instructor from "./Instructor/ViewInstructor";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("home");
@@ -189,6 +190,7 @@ export default function Sidebar() {
         {selectedField === "instructors" ? (
           <Instructor/>
         ) : null}
+      
       </div>
     </div>
   );

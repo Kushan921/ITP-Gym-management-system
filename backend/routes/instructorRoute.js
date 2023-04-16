@@ -67,6 +67,23 @@ router.route("/update/:id").put(async (req,res)=>{
     })
 })
 
+//Updateone
+router.route("/updateOne/:id").put(async (req, res) => {
+    let instructor = await Instructor.findById(req.params.id);
+    const data = {
+        first_name: req.body.first_name || instructor.first_name,
+        last_name: req.body.last_name || instructor.last_name,
+        age: req.body.age || instructor.age,
+        gender: req.body.gender || instructor.gender,
+        email: req.body.email || instructor.email,
+        contact: req.body.contact || instructor.contact,
+        password: req.body.password || instructor.password,
+
+    };
+    instructor = await Instructor.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.json(instructor);
+});
+
 //delete instructor
 //http://localhost:8020/instructor/delete/:id
 router.route("/delete/:id").delete(async (req, res)=>{
@@ -78,6 +95,18 @@ router.route("/delete/:id").delete(async (req, res)=>{
         console.log(err);
     })
 })
+
+//find one of the Instructor
+//http://localhost:8020/instructor/get/:id
+router.route("/get/:id").get((req,res)=>{
+    let id = req.params.id;
+    Instructor.findById(id).then((instructor)=>{
+        res.json(instructor)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+
 
 
 

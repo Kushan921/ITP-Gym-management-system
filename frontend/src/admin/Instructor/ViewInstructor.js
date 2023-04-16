@@ -1,9 +1,10 @@
-import { Link } from "@mui/material";
+import { Button, Link } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Instructor() {
-
+const navigate=useNavigate();
   const [instructors,setInstructors] = useState([]);
 
   useEffect(() => {
@@ -97,12 +98,16 @@ export default function Instructor() {
                  <td class="px-6 py-4">{instructors.contact}</td>
                  <td class="px-6 py-4">{instructors.password}</td>
                  <td class="px-3 py-4 text-right">
-                   <a
+                   {/* <a
                      href="#"
                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                    >
                      Update&nbsp;&nbsp;&nbsp;&nbsp;
-                   </a>
+                   </a> */}
+                 
+                   <Link  to={`UpdateInstructor/${instructors._id}`}>
+                      Update&nbsp;&nbsp;&nbsp;&nbsp;
+                   </Link>
                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => {
                       if(window.confirm("Are you sure you want to delete this Instructor ?")){
                         deleteInstructor(instructors._id);
