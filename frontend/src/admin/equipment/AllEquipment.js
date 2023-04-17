@@ -17,10 +17,25 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-
+const validationSchema = Yup.object({
+  name: Yup.string().required("Required Name"),
+  age: Yup.number().required("Required Age"),
+  email: Yup.string().email("Invalid email address").required("Required"),
+  phone: Yup.string()
+    .matches(/^0\d{9}$/, {
+      message: "Phone number must start with 0 and have exactly 10 digits",
+    })
+    .required("Phone number is required"),
+  password: Yup.string().required("Required Password"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Required"),
+});
 export default function AllProducts() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
+
+  //Variable to store Data to Update
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
@@ -30,29 +45,47 @@ export default function AllProducts() {
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const [addNewModal, setIsNewOpen] = useState(false);
   const initialValues = {
-    code: "",
-    name: "",
-    description: "",
-    quantity: 0,
+    email: "",
+    password: "",
+    confirmPassword: "",
   };
 
-  const validationSchema = Yup.object().shape({
-    code: Yup.string().required("Required"),
-    name: Yup.string().required("Required"),
-    description: Yup.string().required("Required"),
-    price: Yup.number()
-      .required("Required")
-      .positive("Must be greater than zero")
-      .integer("Must be an integer"),
-    quantity: Yup.number()
-      .required("Required")
-      .positive("Must be greater than zero")
-      .integer("Must be an integer"),
-  });
+  //update Record
+  const updateRecord = () => {
+    if (name == null || name == "" || name == undefined) {
+      toast.error("Please Enter Name !!");
+    } else if (gender == null || gender == "" || gender == undefined) {
+      toast.error("Please Enter Gender !!");
+    } else if (age == null || age == "" || age == undefined) {
+      toast.error("Please Enter age  !!");
+    } else if (email == null || email == "" || email == undefined) {
+      toast.error("Please Enter email  !!");
+    } else if (contact == null || contact == "" || contact == undefined) {
+      toast.error("Please Enter Contact Number  !!");
+    } else if (password == null || password == "" || password == undefined) {
+      toast.error("Please Select password !!");
+    } else {
+      const modal = {
+        name: name,
+        gender: gender,
+        age: age,
+        email: email,
+        contact: contact,
+        password: password,
+      };
+      axios
+        .put(`http://localhost:8020/user/update/${UpdateItem}`, modal)
+        .then((response) => {
+          if (response.status == 200) {
+            toast.success("Successfully Updated Data !!");
+            getData();
+          }
+        });
+    }
+  };
 
-  useEffect(() => {
+  const getData = () => {
     axios
       .get("http://localhost:8020/item/")
       .then((response) => {
@@ -63,70 +96,48 @@ export default function AllProducts() {
         }
       })
       .catch((error) => toast.error(error));
-  }, [items]);
+  };
+  useEffect(() => {
+    getData();
+  },[]);
+
+  function getOneUserData(id) {
+    axios
+      .get(`http://localhost:8020/user/get/${id}`)
+      .then((response) => {
+        if (response) {
+          console.log(response.data.name);
+          setUpdateItem(response.data._id);
+          setName(response.data.name);
+          setGender(response.data.gender);
+          setAge(response.data.age);
+          setEmail(response.data.email);
+          setContact(response.data.contact);
+          setPassword(response.data.password);
+        } else {
+          toast.error("Error While Fetching Data!!");
+        }
+      })
+      .catch((error) => toast.error(error));
+  }
 
   const deleteItem = (id) => {
     axios
       .delete(`http://localhost:8020/item/delete/${id} `)
       .then(() => {
-        toast.error("Deleted Successfully!!");
+        alert("Member details deleted successfully!!");
       })
       .catch((err) => {
         alert(err);
       });
   };
 
-  function AddProduct(values) {
-    console.log(values);
-
-    const response = axios
-      .post(`http://localhost:8020/item/add`, {
-        item_code: values.code,
-        item_name: values.name,
-        description: values.description,
-        price: values.price,
-        quantity: values.quantity,
-        image: "sss",
-      })
-      .then(() => {
-        toast.success("Added Successfully!!");
-        setIsNewOpen(false);
-      }).catch(()=>{
-        toast.error("error!!");
-
-      })
-  }
-
   return (
     <section className="table-auto overflow-y-scroll h-screen pb-10">
       <div className="w-full bg-gray-100 py-10 text-center">
         <h1 className="text-2xl">Store Details</h1>
       </div>
-      <div className="w-full flex flex-row-reverse px-10 mt-10">
-        <button
-          type="button"
-          onClick={() => {
-            setIsNewOpen(true);
-          }}
-          class="  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          {" "}
-          Add New
-          <svg
-            aria-hidden="true"
-            class="w-5 h-5 ml-2 -mr-1"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </button>
-      </div>
+
       <div className=" px-10 mt-10 ">
         <div class=" shadow-md sm:rounded-lg ">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
@@ -170,14 +181,23 @@ export default function AllProducts() {
                   <td class="px-6 py-4">{item.item_name}</td>
                   <td class="px-6 py-4">{item.item_name}</td>
                   <td class="px-1 py-4 text-left">
+                    {/* <a
+                     href="#"
+                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                   >
+                     Update&nbsp;&nbsp;&nbsp;&nbsp;
+                   </a> */}
                     <Button
                       onClick={() => {
                         setIsOpen(true);
+                        getOneUserData(item._id);
                       }}
                     >
                       Update
                     </Button>
-
+                    {/* <Link  to={`UpdateInstructor/${members._id}`}>
+                      Update&nbsp;&nbsp;&nbsp;&nbsp;
+                   </Link> */}
                     <a
                       href="#"
                       class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -200,142 +220,6 @@ export default function AllProducts() {
           </table>
         </div>
       </div>
-      <Modal
-        isOpen={addNewModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <div>
-          {" "}
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={AddProduct}
-          >
-            {({ errors, touched }) => (
-              <Form>
-                <div className="flex-col w-full overflow-auto">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Item Code</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="code"
-                    />
-                  </div>
-
-                  {errors.code && touched.code ? (
-                    <div className="text-red-500 text-xs">{errors.code}</div>
-                  ) : null}
-                </div>
-
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Item Name</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="name"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="name"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Description</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
-                      type="text"
-                      name="description"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="description"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Price</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
-                      name="price"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="price"
-                  />
-                </div>
-
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Quantity</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
-                      name="quantity"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="quantity"
-                  />
-                </div>
-
-                <div className="w-full flex gap-2">
-                  <button
-                    className="bg-red-800 w-1/2 text-white py-3 hover:bg-red-500"
-                    onClick={() => {
-                      setIsNewOpen(false);
-                    }}
-                  >
-                    close
-                  </button>
-                  <button
-                    className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
-                    type="submit"
-                  >
-                    Update
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </Modal>
       <Modal
         isOpen={modalIsOpen}
         style={customStyles}
