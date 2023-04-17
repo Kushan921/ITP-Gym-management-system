@@ -31,9 +31,9 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Required"),
 });
-export default function Members() {
+export default function AllProducts() {
   const navigate = useNavigate();
-  const [members, setMembers] = useState([]);
+  const [items, setItems] = useState([]);
 
   //Variable to store Data to Update
   const [name, setName] = useState("");
@@ -49,19 +49,6 @@ export default function Members() {
     email: "",
     password: "",
     confirmPassword: "",
-  };
-  //Update Modal Open/Close
-  const updateToggle = (item) => {
-    setUpdateModal(!UpdateModal);
-    if (item) {
-      setUpdateItem(item._id);
-      setName(item.name);
-      setGender(item.gender);
-      setAge(item.age);
-      setEmail(item.email);
-      setContact(item.contact);
-      setPassword(item.password);
-    }
   };
 
   //update Record
@@ -93,7 +80,6 @@ export default function Members() {
           if (response.status == 200) {
             toast.success("Successfully Updated Data !!");
             getData();
-            updateToggle(!UpdateModal);
           }
         });
     }
@@ -101,10 +87,10 @@ export default function Members() {
 
   const getData = () => {
     axios
-      .get("http://localhost:8020/user/")
+      .get("http://localhost:8020/item/")
       .then((response) => {
         if (response) {
-          setMembers(response.data);
+          setItems(response.data);
         } else {
           toast.error("Error While Fetching Data!!");
         }
@@ -113,7 +99,7 @@ export default function Members() {
   };
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   function getOneUserData(id) {
     axios
@@ -159,22 +145,22 @@ export default function Members() {
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" class="px-6 py-3">
-                  Name
+                  Item Code
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Gender
+                  Item Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Age
+                  Description
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Email
+                  price
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Phone Number
+                  quantity
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Password
+                  Image
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Action
@@ -182,19 +168,19 @@ export default function Members() {
               </tr>
             </thead>
             <tbody>
-              {members.map((members) => (
+              {items.map((item) => (
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <th
                     scope="row"
                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {members.name}
+                    {item.item_code}
                   </th>
-                  <td class="px-6 py-4">{members.gender}</td>
-                  <td class="px-6 py-4">{members.age}</td>
-                  <td class="px-6 py-4">{members.email}</td>
-                  <td class="px-6 py-4">{members.contact}</td>
-                  <td class="px-6 py-4">{members.password}</td>
+                  <td class="px-6 py-4">{item.item_name}</td>
+                  <td class="px-6 py-4">{item.item_name}</td>
+                  <td class="px-6 py-4">{item.item_name}</td>
+                  <td class="px-6 py-4">{item.item_name}</td>
+                  <td class="px-6 py-4">{item.item_name}</td>
                   <td class="px-1 py-4 text-left">
                     {/* <a
                      href="#"
@@ -205,7 +191,7 @@ export default function Members() {
                     <Button
                       onClick={() => {
                         setIsOpen(true);
-                        getOneUserData(members._id);
+                        getOneUserData(item._id);
                       }}
                     >
                       Update
@@ -222,7 +208,7 @@ export default function Members() {
                             "Are you sure you want to delete this Member ?"
                           )
                         ) {
-                          deleteMember(members._id);
+                          deleteMember(item._id);
                         }
                       }}
                     >
