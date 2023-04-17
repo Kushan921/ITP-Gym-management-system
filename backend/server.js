@@ -55,6 +55,10 @@ app.use("/equipment",EquipmentRouter);
 const PaymentRouter = require("./routes/paymentRoute");
 app.use("/payment",PaymentRouter);
 
+//session
+const SessionRouter = require("./routes/sessionRoute");
+app.use("/session",SessionRouter);
+
 //run the app using portd
 app.listen(PORT, () =>{
     console.log(`Server is up and running on port number: ${PORT}`);
