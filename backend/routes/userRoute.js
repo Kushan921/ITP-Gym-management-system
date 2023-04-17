@@ -99,7 +99,7 @@ router.route("/login").post((req, res) => {
 });
 
 
-//get one of the Item
+//get one of the user
 //http://localhost:8020/user/get/:id
 router.route("/get/:id").get((req,res)=>{
     let id = req.params.id;
