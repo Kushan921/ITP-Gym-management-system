@@ -11,11 +11,11 @@ const SalarySchema = new Schema({
         required: true
     },
     basic_salary : {
-        type : String,
+        type : Number,
         required : true
     },
     allowance : {
-        type : String,
+        type : Number,
         required : true
     },
     paid_date : {

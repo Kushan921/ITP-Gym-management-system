@@ -43,6 +43,10 @@ app.use("/instructor",instructorRouter);
 const StoreRouter = require("./routes/storeRoute");
 app.use("/item",StoreRouter);
 
+//salary
+const SalaryRouter = require("./routes/salaryRoute");
+app.use("/salary",SalaryRouter);
+
 //run the app using portd
 app.listen(PORT, () =>{
     console.log(`Server is up and running on port number: ${PORT}`);
