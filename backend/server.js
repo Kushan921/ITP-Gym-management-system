@@ -51,6 +51,10 @@ app.use("/salary",SalaryRouter);
 const EquipmentRouter = require("./routes/equipmentRoute");
 app.use("/equipment",EquipmentRouter);
 
+//payment
+const PaymentRouter = require("./routes/paymentRoute");
+app.use("/payment",PaymentRouter);
+
 //run the app using portd
 app.listen(PORT, () =>{
     console.log(`Server is up and running on port number: ${PORT}`);
