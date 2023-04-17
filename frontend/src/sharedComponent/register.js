@@ -53,8 +53,7 @@ export default function Register() {
   });
 
   const onSubmit = (values) => {
-    console.log(values.email);
-    console.log(values.name);
+   
     const responses = axios
 
     .post(

@@ -5,7 +5,7 @@ import Register from "./sharedComponent/register";
 import Dashboard from "./admin/dashboard";
 import AddInstructor from "./admin/Instructor/AddInstructor";
 import UpdateInstructor from "./admin/Instructor/UpdateInstructor";
-import Members from "./sharedComponent/ViewMembers";
+import Members from "./admin/members/ViewMembers";
 import Allmembers from "./sharedComponent/allmembers";
 import Modals from "./sharedComponent/Modal";
 
@@ -13,6 +13,7 @@ import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
+    
     <div>
       <ToastContainer/>
  <BrowserRouter>
