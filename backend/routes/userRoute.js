@@ -98,4 +98,17 @@ router.route("/login").post((req, res) => {
     });
 });
 
+
+//get one of the Item
+//http://localhost:8020/user/get/:id
+router.route("/get/:id").get((req,res)=>{
+    let id = req.params.id;
+    User.findById(id).then((user)=>{
+        res.json(user)
+    }).catch((err)=>{
+        console.log(err);
+    })
+})
+
+
 module.exports = router;
