@@ -93,38 +93,16 @@ router.route("/delete/:id").delete(async (req, res)=>{
     })
 })
 
-//find one of the Item
-//http://localhost:8020/instructor/get/:id
+//get one of the Item
+//http://localhost:8020/item/get/:id
 router.route("/get/:id").get((req,res)=>{
     let id = req.params.id;
-    Instructor.findById(id).then((instructor)=>{
-        res.json(instructor)
+    Store.findById(id).then((item)=>{
+        res.json(item)
     }).catch((err)=>{
         console.log(err);
     })
 })
 
-
-
-
-//instructor login
-//http://localhost:8020/instructor/login
-router.route("/instructor-login").post((req, res) => {
-    const password = req.body.password;
-    Instructor.findOne({ email: req.body.email }).then(instructor => {
-        // Check if instructor exists
-        if (!instructor) {
-            return res.status(404).json({email: "Email not found"});
-        } else {
-            // Check password
-            if (password === instructor.password) {
-                res.send(instructor);
-                
-            } else {
-                return res.status(400).json({password: "Password incorrect"});
-            }
-        }
-    });
-});
 
 module.exports = router;
