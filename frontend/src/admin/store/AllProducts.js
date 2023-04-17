@@ -22,11 +22,11 @@ export default function AllProducts() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
-  const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [photo, setPhoto] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -91,10 +91,39 @@ export default function AllProducts() {
       .then(() => {
         toast.success("Added Successfully!!");
         setIsNewOpen(false);
-      }).catch(()=>{
-        toast.error("error!!");
-
       })
+      .catch(() => {
+        toast.error("error!!");
+      });
+  }
+
+  function getOne(id) {
+    const response = axios
+      .get(`http://localhost:8020/item/get/${id}`)
+      .then((response) => {
+        setCode(response?.data?.item_code);
+        setName(response?.data?.item_name);
+        setDescription(response?.data?.description);
+        setPrice(response?.data?.price);
+        setPhoto(response?.data?.photo);
+        setQuantity(response?.data?.quantity);
+        setUpdateItem(response?.data?._id);
+        console.log(response?.data?._id)
+      });
+  }
+  function updateItem(values) {
+    const response = axios
+      .put(`http://localhost:8020/item/updateOne/${UpdateItem}`, {
+        item_code: values.code,
+        item_name: values.name,
+        description: values.description,
+        price: values.price,
+        quantity: values.quantity,
+      })
+      .then((response) => {
+        toast.success("update Successful");
+        setIsOpen(false);
+      });
   }
 
   return (
@@ -165,14 +194,15 @@ export default function AllProducts() {
                     {item.item_code}
                   </th>
                   <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
+                  <td class="px-6 py-4">{item.description}</td>
+                  <td class="px-6 py-4">{item.price}</td>
+                  <td class="px-6 py-4">{item.quantity}</td>
+                  <td class="px-6 py-4">{item.image}</td>
                   <td class="px-1 py-4 text-left">
                     <Button
                       onClick={() => {
                         setIsOpen(true);
+                        getOne(item._id);
                       }}
                     >
                       Update
@@ -344,18 +374,42 @@ export default function AllProducts() {
         <div>
           {" "}
           <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={() => {
-              alert("hit");
+            initialValues={{
+              code: code,
+              name: name,
+              description: description,
+              price: price,
+              quantity: quantity,
             }}
+            validationSchema={validationSchema}
+            onSubmit={updateItem}
           >
             {({ errors, touched }) => (
               <Form>
                 <div className="flex-col w-full overflow-auto">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Name</p>
+                    <p className="font-semibold">Item Code</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="text"
+                      name="code"
+                      setFieldValue={code}
+                    />
+                  </div>
+
+                  {errors.code && touched.code ? (
+                    <div className="text-red-500 text-xs">{errors.code}</div>
+                  ) : null}
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Item Name</p>
                   </div>
                   <div className="ll">
                     {" "}
@@ -363,10 +417,6 @@ export default function AllProducts() {
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="text"
                       name="name"
-                      value={name}
-                      onKeyUp={(e) => {
-                        setName(e.target.value);
-                      }}
                     />
                   </div>
 
@@ -378,137 +428,63 @@ export default function AllProducts() {
                 </div>
                 <div className="flex-col w-full">
                   <div className="ll">
-                    <p className="font-semibold">Gender</p>
+                    {" "}
+                    <p className="font-semibold">Description</p>
                   </div>
                   <div className="ll">
-                    <select
-                      className="w-full outline-2 border p-3"
-                      value={gender}
-                      name="gender"
-                      onChange={(event) => {
-                        setGender(event.target.value);
-                      }}
-                    >
-                      <option className="p-3" value="male">
-                        select
-                      </option>
-                      <option className="p-3" value="male">
-                        Male
-                      </option>
-                      <option className="p-3" value="female">
-                        Female
-                      </option>
-                    </select>
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
+                      type="text"
+                      name="description"
+                    />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="gender"
+                    name="description"
                   />
                 </div>
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Age</p>
+                    <p className="font-semibold">Price</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="number"
-                      name="age"
-                      value={age}
+                      name="price"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="age"
+                    name="price"
                   />
                 </div>
+
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Email</p>
+                    <p className="font-semibold">Quantity</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="email"
-                      name="email"
-                      value={email}
+                      type="number"
+                      name="quantity"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="email"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Phone Number</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="phone"
-                      name="phone"
-                      value={contact}
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="phone"
-                  />
-                </div>
-
-                <div className="flex-col">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Password</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
-                      type="password"
-                      name="password"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs italic"
-                    name="password"
-                  />
-                </div>
-                <div>
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Confirm Password</p>
-                  </div>
-                  <div className="ll w-full">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-3  rounded-md w-full"
-                      type="password"
-                      name="confirmPassword"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs italic"
-                    name="confirmPassword"
+                    name="quantity"
                   />
                 </div>
 
