@@ -271,6 +271,9 @@ export default function Members() {
                         setGender(event.target.value);
                       }}
                     >
+                       <option className="p-3" value="male">
+                        select
+                      </option>
                       <option className="p-3" value="male">
                         Male
                       </option>
