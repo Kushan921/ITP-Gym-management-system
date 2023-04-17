@@ -17,75 +17,42 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
-const validationSchema = Yup.object({
-  name: Yup.string().required("Required Name"),
-  age: Yup.number().required("Required Age"),
-  email: Yup.string().email("Invalid email address").required("Required"),
-  phone: Yup.string()
-    .matches(/^0\d{9}$/, {
-      message: "Phone number must start with 0 and have exactly 10 digits",
-    })
-    .required("Phone number is required"),
-  password: Yup.string().required("Required Password"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords must match")
-    .required("Required"),
-});
-export default function AllProducts() {
+
+export default function AllEquipment() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
-
-  //Variable to store Data to Update
   const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
-  const [email, setEmail] = useState("");
-  const [contact, setContact] = useState("");
-  const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [photo, setPhoto] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [addNewModal, setIsNewOpen] = useState(false);
   const initialValues = {
-    email: "",
-    password: "",
-    confirmPassword: "",
+    code: "",
+    name: "",
+    description: "",
+    quantity: 0,
   };
 
-  //update Record
-  const updateRecord = () => {
-    if (name == null || name == "" || name == undefined) {
-      toast.error("Please Enter Name !!");
-    } else if (gender == null || gender == "" || gender == undefined) {
-      toast.error("Please Enter Gender !!");
-    } else if (age == null || age == "" || age == undefined) {
-      toast.error("Please Enter age  !!");
-    } else if (email == null || email == "" || email == undefined) {
-      toast.error("Please Enter email  !!");
-    } else if (contact == null || contact == "" || contact == undefined) {
-      toast.error("Please Enter Contact Number  !!");
-    } else if (password == null || password == "" || password == undefined) {
-      toast.error("Please Select password !!");
-    } else {
-      const modal = {
-        name: name,
-        gender: gender,
-        age: age,
-        email: email,
-        contact: contact,
-        password: password,
-      };
-      axios
-        .put(`http://localhost:8020/user/update/${UpdateItem}`, modal)
-        .then((response) => {
-          if (response.status == 200) {
-            toast.success("Successfully Updated Data !!");
-            getData();
-          }
-        });
-    }
-  };
+  const validationSchema = Yup.object().shape({
+    code: Yup.string().required("Required"),
+    name: Yup.string().required("Required"),
+    description: Yup.string().required("Required"),
+    price: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+    quantity: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+  });
 
-  const getData = () => {
+  useEffect(() => {
     axios
       .get("http://localhost:8020/item/")
       .then((response) => {
@@ -96,55 +63,107 @@ export default function AllProducts() {
         }
       })
       .catch((error) => toast.error(error));
-  };
-  useEffect(() => {
-    getData();
-  },[]);
-
-  function getOneUserData(id) {
-    axios
-      .get(`http://localhost:8020/user/get/${id}`)
-      .then((response) => {
-        if (response) {
-          console.log(response.data.name);
-          setUpdateItem(response.data._id);
-          setName(response.data.name);
-          setGender(response.data.gender);
-          setAge(response.data.age);
-          setEmail(response.data.email);
-          setContact(response.data.contact);
-          setPassword(response.data.password);
-        } else {
-          toast.error("Error While Fetching Data!!");
-        }
-      })
-      .catch((error) => toast.error(error));
-  }
+  }, [items]);
 
   const deleteItem = (id) => {
     axios
       .delete(`http://localhost:8020/item/delete/${id} `)
       .then(() => {
-        alert("Member details deleted successfully!!");
+        toast.error("Deleted Successfully!!");
       })
       .catch((err) => {
         alert(err);
       });
   };
 
+  function AddProduct(values) {
+    console.log(values);
+
+    const response = axios
+      .post(`http://localhost:8020/item/add`, {
+        item_code: values.code,
+        item_name: values.name,
+        description: values.description,
+        price: values.price,
+        quantity: values.quantity,
+        image: "sss",
+      })
+      .then(() => {
+        toast.success("Added Successfully!!");
+        setIsNewOpen(false);
+      })
+      .catch(() => {
+        toast.error("error!!");
+      });
+  }
+
+  function getOne(id) {
+    const response = axios
+      .get(`http://localhost:8020/item/get/${id}`)
+      .then((response) => {
+        setIsOpen(true);
+        setCode(response?.data?.item_code);
+        setName(response?.data?.item_name);
+        setDescription(response?.data?.description);
+        setPrice(response?.data?.price);
+        setPhoto(response?.data?.photo);
+        setQuantity(response?.data?.quantity);
+        setUpdateItem(response?.data?._id);
+        console.log(response?.data?._id);
+      });
+  }
+  function updateItem(values) {
+    const response = axios
+      .put(`http://localhost:8020/item/updateOne/${UpdateItem}`, {
+        item_code: values.code,
+        item_name: values.name,
+        description: values.description,
+        price: values.price,
+        quantity: values.quantity,
+      })
+      .then((response) => {
+        toast.success("update Successful");
+        setIsOpen(false);
+      });
+  }
+
   return (
     <section className="table-auto overflow-y-scroll h-screen pb-10">
       <div className="w-full bg-gray-100 py-10 text-center">
-        <h1 className="text-2xl">Store Details</h1>
+        <h1 className="text-2xl">Equipment Details</h1>
       </div>
-
+      <div className="w-full flex flex-row-reverse px-10 mt-10">
+        <button
+          type="button"
+          onClick={() => {
+            setIsNewOpen(true);
+          }}
+          class="  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          {" "}
+          Add New
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5 ml-2 -mr-1"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
       <div className=" px-10 mt-10 ">
         <div class=" shadow-md sm:rounded-lg ">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" class="px-6 py-3">
-                  Item Code
+                  Equipment Code
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Item Name
@@ -161,7 +180,7 @@ export default function AllProducts() {
                 <th scope="col" class="px-6 py-3">
                   Image
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" class="px-6 py-3 text-center">
                   Action
                 </th>
               </tr>
@@ -176,31 +195,36 @@ export default function AllProducts() {
                     {item.item_code}
                   </th>
                   <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-6 py-4">{item.item_name}</td>
-                  <td class="px-1 py-4 text-left">
-                    {/* <a
-                     href="#"
-                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                   >
-                     Update&nbsp;&nbsp;&nbsp;&nbsp;
-                   </a> */}
-                    <Button
+                  <td class="px-6 py-4">{item.description}</td>
+                  <td class="px-6 py-4">{item.price}</td>
+                  <td class="px-6 py-4">{item.quantity}</td>
+                  <td class="px-6 py-4">{item.image}</td>
+                  <td class="px-1 py-4 w-full justify-center flex gap-4">
+                    <button
+                      className="font-medium text-yellow-300 hover:text-yellow-100"
                       onClick={() => {
-                        setIsOpen(true);
-                        getOneUserData(item._id);
+                        getOne(item._id);
                       }}
                     >
-                      Update
-                    </Button>
-                    {/* <Link  to={`UpdateInstructor/${members._id}`}>
-                      Update&nbsp;&nbsp;&nbsp;&nbsp;
-                   </Link> */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.2}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                        />
+                      </svg>
+                    </button>
+
                     <a
                       href="#"
-                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      class="font-medium"
                       onClick={() => {
                         if (
                           window.confirm(
@@ -211,7 +235,20 @@ export default function AllProducts() {
                         }
                       }}
                     >
-                      Delete
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5 text-red-500 hover:text-red-100"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
                     </a>
                   </td>
                 </tr>
@@ -221,7 +258,7 @@ export default function AllProducts() {
         </div>
       </div>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={addNewModal}
         style={customStyles}
         contentLabel="Example Modal"
       >
@@ -230,16 +267,33 @@ export default function AllProducts() {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={() => {
-              alert("hit");
-            }}
+            onSubmit={AddProduct}
           >
             {({ errors, touched }) => (
               <Form>
                 <div className="flex-col w-full overflow-auto">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Name</p>
+                    <p className="font-semibold">Item Code</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="text"
+                      name="code"
+                    />
+                  </div>
+
+                  {errors.code && touched.code ? (
+                    <div className="text-red-500 text-xs">{errors.code}</div>
+                  ) : null}
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Item Name</p>
                   </div>
                   <div className="ll">
                     {" "}
@@ -247,10 +301,6 @@ export default function AllProducts() {
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="text"
                       name="name"
-                      value={name}
-                      onKeyUp={(e) => {
-                        setName(e.target.value);
-                      }}
                     />
                   </div>
 
@@ -262,137 +312,206 @@ export default function AllProducts() {
                 </div>
                 <div className="flex-col w-full">
                   <div className="ll">
-                    <p className="font-semibold">Gender</p>
+                    {" "}
+                    <p className="font-semibold">Description</p>
                   </div>
                   <div className="ll">
-                    <select
-                      className="w-full outline-2 border p-3"
-                      value={gender}
-                      name="gender"
-                      onChange={(event) => {
-                        setGender(event.target.value);
-                      }}
-                    >
-                      <option className="p-3" value="male">
-                        select
-                      </option>
-                      <option className="p-3" value="male">
-                        Male
-                      </option>
-                      <option className="p-3" value="female">
-                        Female
-                      </option>
-                    </select>
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
+                      type="text"
+                      name="description"
+                    />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="gender"
+                    name="description"
                   />
                 </div>
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Age</p>
+                    <p className="font-semibold">Price</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="number"
-                      name="age"
-                      value={age}
+                      name="price"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="age"
+                    name="price"
                   />
                 </div>
+
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Email</p>
+                    <p className="font-semibold">Quantity</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="email"
-                      name="email"
-                      value={email}
+                      type="number"
+                      name="quantity"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="email"
+                    name="quantity"
                   />
                 </div>
-                <div className="flex-col w-full">
+
+                <div className="w-full flex gap-2">
+                  <button
+                    className="bg-red-800 w-1/2 text-white py-3 hover:bg-red-500"
+                    onClick={() => {
+                      setIsNewOpen(false);
+                    }}
+                  >
+                    close
+                  </button>
+                  <button
+                    className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
+                    type="submit"
+                  >
+                    Update
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div>
+          {" "}
+          <Formik
+            initialValues={{
+              code: code,
+              name: name,
+              description: description,
+              price: price,
+              quantity: quantity,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={updateItem}
+          >
+            {({ errors, touched }) => (
+              <Form>
+                <div className="flex-col w-full overflow-auto">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Phone Number</p>
+                    <p className="font-semibold">Item Code</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="phone"
-                      name="phone"
-                      value={contact}
+                      type="text"
+                      name="code"
+                      setFieldValue={code}
+                    />
+                  </div>
+
+                  {errors.code && touched.code ? (
+                    <div className="text-red-500 text-xs">{errors.code}</div>
+                  ) : null}
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Item Name</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="text"
+                      name="name"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="phone"
+                    name="name"
                   />
                 </div>
-
-                <div className="flex-col">
+                <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Password</p>
+                    <p className="font-semibold">Description</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
-                      className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
-                      type="password"
-                      name="password"
+                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
+                      type="text"
+                      name="description"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
-                    className="text-red-500 text-xs italic"
-                    name="password"
+                    className="text-red-500 text-xs"
+                    name="description"
                   />
                 </div>
-                <div>
+                <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Confirm Password</p>
+                    <p className="font-semibold">Price</p>
                   </div>
-                  <div className="ll w-full">
+                  <div className="ll">
                     {" "}
                     <Field
-                      className="border border-grey-dark text-sm p-3 my-3  rounded-md w-full"
-                      type="password"
-                      name="confirmPassword"
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="number"
+                      name="price"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
-                    className="text-red-500 text-xs italic"
-                    name="confirmPassword"
+                    className="text-red-500 text-xs"
+                    name="price"
+                  />
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Quantity</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="number"
+                      name="quantity"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="quantity"
                   />
                 </div>
 

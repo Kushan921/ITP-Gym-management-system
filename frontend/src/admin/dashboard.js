@@ -3,6 +3,7 @@ import Instructor from "./Instructor/ViewInstructor";
 import { useNavigate } from "react-router-dom";
 import Members from "./members/ViewMembers";
 import AllProducts from "./store/AllProducts";
+import AllEquipment from "./equipment/AllEquipment";
 
 
 export default function Sidebar() {
@@ -216,7 +217,7 @@ export default function Sidebar() {
           <AllProducts/>
         ) : null}
           {selectedField === "equipment" ? (
-          <Members/>
+          <AllEquipment/>
         ) : null}
       
       </div>
