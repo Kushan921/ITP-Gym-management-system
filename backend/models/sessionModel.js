@@ -11,7 +11,7 @@ const SessionSchema = new Schema({
         required: true
     },
     location : {
-        type : Number,
+        type : String,
         required : true
     },
     date : {
@@ -23,7 +23,7 @@ const SessionSchema = new Schema({
         required: true
     },
     end_time : {
-        type : Number,
+        type : String,
         required : true
     }
 
