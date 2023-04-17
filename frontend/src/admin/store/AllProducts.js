@@ -101,6 +101,7 @@ export default function AllProducts() {
     const response = axios
       .get(`http://localhost:8020/item/get/${id}`)
       .then((response) => {
+        setIsOpen(true);
         setCode(response?.data?.item_code);
         setName(response?.data?.item_name);
         setDescription(response?.data?.description);
@@ -108,7 +109,7 @@ export default function AllProducts() {
         setPhoto(response?.data?.photo);
         setQuantity(response?.data?.quantity);
         setUpdateItem(response?.data?._id);
-        console.log(response?.data?._id)
+        console.log(response?.data?._id);
       });
   }
   function updateItem(values) {
@@ -201,7 +202,6 @@ export default function AllProducts() {
                   <td class="px-1 py-4 text-left">
                     <Button
                       onClick={() => {
-                        setIsOpen(true);
                         getOne(item._id);
                       }}
                     >
