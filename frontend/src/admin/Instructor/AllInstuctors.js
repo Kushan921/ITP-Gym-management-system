@@ -21,12 +21,12 @@ const customStyles = {
 export default function AllInstructors() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
-  const [name, setName] = useState("");
-  const [code, setCode] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [age, setAge] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -64,7 +64,7 @@ export default function AllInstructors() {
         }
       })
       .catch((error) => toast.error(error));
-  }, []);
+  }, [items]);
 
   const deleteItem = (id) => {
     axios
@@ -101,27 +101,30 @@ export default function AllInstructors() {
 
   function getOne(id) {
     const response = axios
-      .get(`http://localhost:8020/item/get/${id}`)
+      .get(`http://localhost:8020/instructor/get/${id}`)
       .then((response) => {
         setIsOpen(true);
-        setCode(response?.data?.item_code);
-        setName(response?.data?.item_name);
-        setDescription(response?.data?.description);
-        setPrice(response?.data?.price);
-        setPhoto(response?.data?.photo);
-        setQuantity(response?.data?.quantity);
+        setFirstName(response?.data?.first_name);
+        setLastName(response?.data?.last_name);
+        setAge(response?.data?.age);
+        setGender(response?.data?.gender);
+        setEmail(response?.data?.email);
+        setPassword(response?.data?.quantity);
+        setPhone(response?.data?.contact);
         setUpdateItem(response?.data?._id);
         console.log(response?.data?._id);
       });
   }
   function updateItem(values) {
     const response = axios
-      .put(`http://localhost:8020/item/updateOne/${UpdateItem}`, {
-        item_code: values.code,
-        item_name: values.name,
-        description: values.description,
-        price: values.price,
-        quantity: values.quantity,
+      .put(`http://localhost:8020/instructor/update/${UpdateItem}`, {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        age: values.age,
+        gender: gender,
+        email: values.email,
+        contact: values.phone,
+        password: values.password,
       })
       .then((response) => {
         toast.success("update Successful");
@@ -318,10 +321,14 @@ export default function AllInstructors() {
                       <select
                         className="w-full outline-2 border p-3"
                         value={gender}
+                        required={true}
                         onChange={(event) => {
                           setGender(event.target.value);
                         }}
                       >
+                        <option className="p-3" value="">
+                          -select-
+                        </option>
                         <option className="p-3" value="male">
                           Male
                         </option>
@@ -471,56 +478,101 @@ export default function AllInstructors() {
           {" "}
           <Formik
             initialValues={{
-              code: code,
-              name: name,
-              description: description,
-              price: price,
-              quantity: quantity,
+              firstName: firstName,
+              lastName: lastName,
+              gender: gender,
+              age: age,
+              email: email,
+              password: password,
+              phone: phone,
             }}
             validationSchema={validationSchema}
             onSubmit={updateItem}
           >
             {({ errors, touched }) => (
               <Form>
-                <div className="flex-col">
-                  <div className="flex-col w-full overflow-auto">
-                    <div className="ll">
-                      {" "}
-                      <p className="font-semibold">Item Code</p>
-                    </div>
-                    <div className="ll">
-                      {" "}
-                      <Field
-                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                        type="text"
-                        name="code"
-                        setFieldValue={code}
-                      />
-                    </div>
-
-                    {errors.code && touched.code ? (
-                      <div className="text-red-500 text-xs">{errors.code}</div>
-                    ) : null}
-                  </div>
-
+                <div className="flex gap-4">
                   <div className="flex-col w-full">
                     <div className="ll">
                       {" "}
-                      <p className="font-semibold">Item Name</p>
+                      <p className="font-semibold">First Name</p>
                     </div>
                     <div className="ll">
                       {" "}
                       <Field
                         className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                         type="text"
-                        name="name"
+                        name="firstName"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">Last Name</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="text"
+                        name="lastName"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      <p className="font-semibold">Gender</p>
+                    </div>
+                    <div className="ll">
+                      <select
+                        className="w-full outline-2 border p-3"
+                        value={gender}
+                        required={true}
+                        onChange={(event) => {
+                          setGender(event.target.value);
+                        }}
+                      >
+                        <option className="p-3" value="">
+                          -select-
+                        </option>
+                        <option className="p-3" value="male">
+                          Male
+                        </option>
+                        <option className="p-3" value="female">
+                          Female
+                        </option>
+                      </select>
+                    </div>
+
+                    <ErrorMessage
+                      component="div"
+                      className="text-red-500 text-xs"
+                      name="gender"
+                    />
+                  </div>
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">Age</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="number"
+                        name="age"
                       />
                     </div>
 
                     <ErrorMessage
                       component="div"
                       className="text-red-500 text-xs"
-                      name="name"
+                      name="age"
                     />
                   </div>
                 </div>
@@ -528,62 +580,82 @@ export default function AllInstructors() {
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Description</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
-                      type="text"
-                      name="description"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="description"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Price</p>
+                    <p className="font-semibold">Email</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
-                      name="price"
+                      type="email"
+                      name="email"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="price"
+                    name="email"
                   />
                 </div>
-
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Quantity</p>
+                    <p className="font-semibold">Phone Number</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
-                      name="quantity"
+                      type="phone"
+                      name="phone"
                     />
                   </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="quantity"
+                    name="phone"
+                  />
+                </div>
+
+                <div className="flex-col">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Password</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
+                      type="password"
+                      name="password"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs italic"
+                    name="password"
+                  />
+                </div>
+                <div>
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Confirm Password</p>
+                  </div>
+                  <div className="ll w-full">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-3  rounded-md w-full"
+                      type="password"
+                      name="confirmPassword"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs italic"
+                    name="confirmPassword"
                   />
                 </div>
 
