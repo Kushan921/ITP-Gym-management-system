@@ -13,6 +13,7 @@ import Header from "./userView/Header/Header";
 import Footer from "./userView/Footer/Footer";
 import Contact from "./userView/Contact";
 import About from "./userView/About";
+import Suppliments from "./userView/Suppliments/suppliments";
 
 
 import { ToastContainer } from "react-toastify";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/footer" exact element={<Footer/>}/>
           <Route path="/about" exact element={<About/>}/>
           <Route path="/contact" exact element={<Contact/>}/>
+          <Route path="/suppliments" exact element={<Suppliments/>}/>
           
         </Routes>
       </BrowserRouter>
