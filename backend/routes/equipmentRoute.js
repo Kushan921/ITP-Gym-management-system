@@ -82,7 +82,7 @@ router.route("/updateOne/:id").put(async (req, res) => {
 
     };
     equipment = await Equipment.findByIdAndUpdate(req.params.id, data, { new: true });
-    res.json(item);
+    res.json(equipment);
 });
 
 //delete equipment
