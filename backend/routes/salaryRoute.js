@@ -75,7 +75,7 @@ router.route("/updateOne/:id").put(async (req, res) => {
 
     };
     salary = await Salary.findByIdAndUpdate(req.params.id, data, { new: true });
-    res.json(item);
+    res.json(salary);
 });
 
 //delete salary
