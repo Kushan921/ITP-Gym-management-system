@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Members from "./members/ViewMembers";
 import AllProducts from "./store/AllProducts";
 import AllEquipment from "./equipment/AllEquipment";
+import AllInstructors from "./Instructor/AllInstuctors";
 
 
 
@@ -209,7 +210,7 @@ export default function Sidebar() {
           </div>
         ) : null}
         {selectedField === "instructors" ? (
-          <Instructor/>
+          <AllInstructors/>
         ) : null}
           {selectedField === "members" ? (
           <Members/>

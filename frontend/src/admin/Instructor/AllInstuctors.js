@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import Modal from "react-modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import DatePicker from "react-datepicker";
 
 const customStyles = {
   content: {
@@ -19,30 +18,20 @@ const customStyles = {
   },
 };
 
-export default function AllEquipment() {
+export default function AllInstructors() {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
-
-  const [dimension, setDimension] = useState("");
-  const [lastServiceDate, setLastServiceDate] = useState("");
-  const [nextServiceDate, setNextServiceDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [photo, setPhoto] = useState("");
-  const [type, setType] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [addNewModal, setIsNewOpen] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const maxDate = new Date();
-  const [year, setYear] = useState(new Date());
-
-  const handleYearChange = (date) => {
-    setYear(date);
-  };
-
+  const [gender, setGender] = React.useState(null);
   const initialValues = {
     code: "",
     name: "",
@@ -51,16 +40,22 @@ export default function AllEquipment() {
   };
 
   const validationSchema = Yup.object().shape({
-    // code: Yup.string().required("Required"),
-    // name: Yup.string().required("Required"),
-    // type: Yup.string().required("Required"),
-    // yom: Yup.number().required("Required"),
-    // dimension: Yup.string().required("Required"),
+    age: Yup.number().required("Required Age"),
+    email: Yup.string().email("Invalid email address").required("Required"),
+    phone: Yup.string()
+      .matches(/^0\d{9}$/, {
+        message: "Phone number must start with 0 and have exactly 10 digits",
+      })
+      .required("Phone number is required"),
+    password: Yup.string().required("Required Password"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password")], "Passwords must match")
+      .required("Required"),
   });
 
   useEffect(() => {
     axios
-      .get("http://localhost:8020/equipment")
+      .get("http://localhost:8020/instructor/")
       .then((response) => {
         if (response) {
           setItems(response.data);
@@ -69,11 +64,11 @@ export default function AllEquipment() {
         }
       })
       .catch((error) => toast.error(error));
-  }, [items]);
+  }, []);
 
   const deleteItem = (id) => {
     axios
-      .delete(`http://localhost:8020/equipment/delete/${id} `)
+      .delete(`http://localhost:8020/instructor/delete/${id} `)
       .then(() => {
         toast.error("Deleted Successfully!!");
       })
@@ -86,14 +81,14 @@ export default function AllEquipment() {
     console.log(values);
 
     const response = axios
-      .post(`http://localhost:8020/equipment/add`, {
-        Id: values.code,
-        name: values.name,
-        type: type,
-        YOM: year,
-        dimension: values.dimension,
-        last_service_date: startDate,
-        next_service_date: endDate,
+      .post(`http://localhost:8020/instructor/add`, {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        age: values.age,
+        gender: values.gender,
+        email: values.email,
+        contact: values.contact,
+        password: values.password,
       })
       .then(() => {
         toast.success("Added Successfully!!");
@@ -106,54 +101,38 @@ export default function AllEquipment() {
 
   function getOne(id) {
     const response = axios
-      .get(`http://localhost:8020/equipment/get/${id}`)
+      .get(`http://localhost:8020/item/get/${id}`)
       .then((response) => {
-        console.log(response?.data?._id);
+        setIsOpen(true);
+        setCode(response?.data?.item_code);
+        setName(response?.data?.item_name);
+        setDescription(response?.data?.description);
+        setPrice(response?.data?.price);
+        setPhoto(response?.data?.photo);
+        setQuantity(response?.data?.quantity);
         setUpdateItem(response?.data?._id);
-        const yearOfManufacture = new Date(response?.data?.YOM);
-        const lastServiceDate = new Date(response?.data?.last_service_date);
-        const nextServiceDate = new Date(response?.data?.next_service_date);
-        if (
-          yearOfManufacture != undefined ||
-          lastServiceDate != undefined ||
-          nextServiceDate != undefined
-        ) {
-          setIsOpen(true);
-          setCode(response?.data?.Id);
-          setName(response?.data?.name);
-          setType(response?.data?.type);
-          setYear(yearOfManufacture);
-          setDimension(response?.data?.dimension);
-          setLastServiceDate(lastServiceDate);
-          setNextServiceDate(nextServiceDate);
-        }
-
-        console.log(response?.data);
+        console.log(response?.data?._id);
       });
   }
   function updateItem(values) {
     const response = axios
-      .put(`http://localhost:8020/equipment/updateOne/${UpdateItem}`, {
-        Id: values.code,
-        name: values.name,
-        type: type,
-        YOM: year,
-        dimension: values.dimension,
-        last_service_date: startDate,
-        next_service_date: endDate,
+      .put(`http://localhost:8020/item/updateOne/${UpdateItem}`, {
+        item_code: values.code,
+        item_name: values.name,
+        description: values.description,
+        price: values.price,
+        quantity: values.quantity,
       })
       .then((response) => {
         toast.success("update Successful");
         setIsOpen(false);
-      }).catch(()=>{
-        toast.error("dd")
-      })
+      });
   }
 
   return (
     <section className="table-auto overflow-y-scroll h-screen pb-10">
       <div className="w-full bg-gray-100 py-10 text-center">
-        <h1 className="text-2xl">Equipment Details</h1>
+        <h1 className="text-2xl">Instructor Details</h1>
       </div>
       <div className="w-full flex flex-row-reverse px-10 mt-10">
         <button
@@ -186,25 +165,25 @@ export default function AllEquipment() {
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" class="px-6 py-3">
-                  Equipment Code
+                  First Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Equipment Name
+                  Last Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Type
+                  Age
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Year Of Made
+                  Gender
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Dimension
+                  Email
                 </th>
                 <th scope="col" class="px-6 py-3">
-                  Last Service Day
+                  Contact
                 </th>
-                <th scope="col" class="px-6 py-3 text-center">
-                  Next Service Day
+                <th scope="col" class="px-6 py-3">
+                  Password
                 </th>
                 <th scope="col" class="px-6 py-3 text-center">
                   Action
@@ -218,26 +197,14 @@ export default function AllEquipment() {
                     scope="row"
                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    {item.Id}
+                    {item.first_name}
                   </th>
-                  <td class="px-6 py-4">{item.name}</td>
-                  <td class="px-6 py-4">{item.type}</td>
-                  <td class="px-6 py-4">{new Date(item.YOM).getFullYear()}</td>
-                  <td class="px-6 py-4">{item.dimension}</td>
-                  <td class="px-6 py-4">
-                    {" "}
-                    {new Date(item.last_service_date).toLocaleDateString(
-                      "en-US",
-                      { day: "numeric", month: "numeric", year: "numeric" }
-                    )}{" "}
-                  </td>
-                  <td class="px-6 py-4">
-                    {" "}
-                    {new Date(item.next_service_date).toLocaleDateString(
-                      "en-US",
-                      { day: "numeric", month: "numeric", year: "numeric" }
-                    )}{" "}
-                  </td>
+                  <td class="px-6 py-4">{item.last_name}</td>
+                  <td class="px-6 py-4">{item.age}</td>
+                  <td class="px-6 py-4">{item.gender}</td>
+                  <td class="px-6 py-4">{item.email}</td>
+                  <td class="px-6 py-4">{item.contact}</td>
+                  <td class="px-6 py-4">{item.password}</td>
                   <td class="px-1 py-4 w-full justify-center flex gap-4">
                     <button
                       className="font-medium text-yellow-300 hover:text-yellow-100"
@@ -310,148 +277,167 @@ export default function AllEquipment() {
           >
             {({ errors, touched }) => (
               <Form>
-                <div className="flex-col w-full overflow-auto">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Equipment Code</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="code"
-                      required={true}
-                    />
-                  </div>
-
-                  {errors.code && touched.code ? (
-                    <div className="text-red-500 text-xs">{errors.code}</div>
-                  ) : null}
-                </div>
-
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Equipment Name </p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="name"
-                      required={true}
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="name"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    <p className="font-semibold">Type</p>
-                  </div>
-                  <div className="ll">
-                    <select
-                      required={true}
-                      className="w-full outline-2 border p-3"
-                      value={type}
-                      onChange={(event) => {
-                        setType(event.target.value);
-                      }}
-                    >
-                      <option className="p-3" value="Treadmills">
-                        Treadmills
-                      </option>
-                      <option className="p-3" value="Rowing Machine">
-                        Rowing Machine
-                      </option>
-                      <option className="p-3" value="Dumbbell Set">
-                        Dumbbell Set
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Year Of Made</p>
-                  </div>
-                  <DatePicker
-                    selected={year}
-                    onChange={handleYearChange}
-                    dateFormat="yyyy"
-                    showYearPicker
-                    isClearable
-                    placeholderText="Select year"
-                    maxDate={maxDate}
-                    className="border p-3 my-2"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Dimension</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="dimension"
-                      required={true}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex-col w-full">
+                <div className="flex gap-4">
                   <div className="flex-col w-full">
                     <div className="ll">
                       {" "}
-                      <p className="font-semibold">last Service Date</p>
+                      <p className="font-semibold">First Name</p>
                     </div>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      maxDate={maxDate}
-                      isClearable
-                      className="border p-3 my-2"
-                    />
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="text"
+                        name="firstName"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">Last Name</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="text"
+                        name="lastName"
+                        required={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      <p className="font-semibold">Gender</p>
+                    </div>
+                    <div className="ll">
+                      <select
+                        className="w-full outline-2 border p-3"
+                        value={gender}
+                        onChange={(event) => {
+                          setGender(event.target.value);
+                        }}
+                      >
+                        <option className="p-3" value="male">
+                          Male
+                        </option>
+                        <option className="p-3" value="female">
+                          Female
+                        </option>
+                      </select>
+                    </div>
 
                     <ErrorMessage
                       component="div"
                       className="text-red-500 text-xs"
-                      name="quantity"
+                      name="gender"
                     />
                   </div>
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="quantity"
-                  />
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">Age</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="number"
+                        name="age"
+                      />
+                    </div>
+
+                    <ErrorMessage
+                      component="div"
+                      className="text-red-500 text-xs"
+                      name="age"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Next Service Date</p>
+                    <p className="font-semibold">Email</p>
                   </div>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    minDate={maxDate}
-                    isClearable
-                    className="border p-3 my-2"
-                  />
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="email"
+                      name="email"
+                    />
+                  </div>
 
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="quantity"
+                    name="email"
+                  />
+                </div>
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Phone Number</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="phone"
+                      name="phone"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="phone"
+                  />
+                </div>
+
+                <div className="flex-col">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Password</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
+                      type="password"
+                      name="password"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs italic"
+                    name="password"
+                  />
+                </div>
+                <div>
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Confirm Password</p>
+                  </div>
+                  <div className="ll w-full">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-3  rounded-md w-full"
+                      type="password"
+                      name="confirmPassword"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs italic"
+                    name="confirmPassword"
                   />
                 </div>
 
@@ -487,154 +473,112 @@ export default function AllEquipment() {
             initialValues={{
               code: code,
               name: name,
-              type: type,
-              yom: year,
-              dimension: dimension,
-              lastServiceDate: lastServiceDate,
-              nextServiceDate: nextServiceDate,
+              description: description,
+              price: price,
+              quantity: quantity,
             }}
             validationSchema={validationSchema}
             onSubmit={updateItem}
           >
             {({ errors, touched }) => (
               <Form>
-                <div className="flex-col w-full overflow-auto">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Equipment Code</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="code"
-                      required={true}
-                    />
+                <div className="flex-col">
+                  <div className="flex-col w-full overflow-auto">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">Item Code</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="text"
+                        name="code"
+                        setFieldValue={code}
+                      />
+                    </div>
+
+                    {errors.code && touched.code ? (
+                      <div className="text-red-500 text-xs">{errors.code}</div>
+                    ) : null}
                   </div>
 
-                  {errors.code && touched.code ? (
-                    <div className="text-red-500 text-xs">{errors.code}</div>
-                  ) : null}
-                </div>
-
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Equipment Name </p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="name"
-                      required={true}
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="name"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    <p className="font-semibold">Type</p>
-                  </div>
-                  <div className="ll">
-                    <select
-                      required={true}
-                      className="w-full outline-2 border p-3"
-                      value={type}
-                      onChange={(event) => {
-                        setType(event.target.value);
-                      }}
-                    >
-                      <option className="p-3" value="Treadmills">
-                        Treadmills
-                      </option>
-                      <option className="p-3" value="Rowing Machine">
-                        Rowing Machine
-                      </option>
-                      <option className="p-3" value="Dumbbell Set">
-                        Dumbbell Set
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Year Of Made</p>
-                  </div>
-                  <DatePicker
-                    selected={year}
-                    onChange={handleYearChange}
-                    dateFormat="yyyy"
-                    showYearPicker
-                    isClearable
-                    placeholderText="Select year"
-                    maxDate={maxDate}
-                    className="border p-3 my-2"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Dimension</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="text"
-                      name="dimension"
-                      required={true}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex-col w-full">
                   <div className="flex-col w-full">
                     <div className="ll">
                       {" "}
-                      <p className="font-semibold">last Service Date</p>
+                      <p className="font-semibold">Item Name</p>
                     </div>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      maxDate={maxDate}
-                      isClearable
-                      className="border p-3 my-2"
-                    />
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="text"
+                        name="name"
+                      />
+                    </div>
 
                     <ErrorMessage
                       component="div"
                       className="text-red-500 text-xs"
-                      name="quantity"
+                      name="name"
                     />
                   </div>
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Description</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
+                      type="text"
+                      name="description"
+                    />
+                  </div>
+
                   <ErrorMessage
                     component="div"
                     className="text-red-500 text-xs"
-                    name="quantity"
+                    name="description"
+                  />
+                </div>
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Price</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="number"
+                      name="price"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="price"
                   />
                 </div>
 
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Next Service Date</p>
+                    <p className="font-semibold">Quantity</p>
                   </div>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    minDate={maxDate}
-                    isClearable
-                    className="border p-3 my-2"
-                  />
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="number"
+                      name="quantity"
+                    />
+                  </div>
 
                   <ErrorMessage
                     component="div"
