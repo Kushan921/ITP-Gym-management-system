@@ -145,8 +145,6 @@ export default function AllEquipment() {
       .then((response) => {
         toast.success("update Successful");
         setIsOpen(false);
-      }).catch(()=>{
-        toast.error("dd")
       })
   }
 
