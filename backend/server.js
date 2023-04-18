@@ -1,6 +1,5 @@
 const express = require("express"); //using the json file dependencies(node_modules)
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
@@ -10,7 +9,10 @@ const app = express();
 require("dotenv").config();
 
 app.use(cors());
-app.use(bodyParser.json());
+
+var bodyParser = require('body-parser'); 
+app.use(bodyParser.json({limit: "50mb"})); 
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 //database link
 const URL = process.env.MONGODB_URL;
