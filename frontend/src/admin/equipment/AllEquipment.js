@@ -24,9 +24,10 @@ export default function AllEquipment() {
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
+
+  const [dimension, setDimension] = useState("");
+  const [lastServiceDate, setLastServiceDate] = useState("");
+  const [nextServiceDate, setNextServiceDate] = useState("");
   const [photo, setPhoto] = useState("");
   const [type, setType] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
@@ -105,32 +106,48 @@ export default function AllEquipment() {
 
   function getOne(id) {
     const response = axios
-      .get(`http://localhost:8020/item/get/${id}`)
+      .get(`http://localhost:8020/equipment/get/${id}`)
       .then((response) => {
-        setIsOpen(true);
-        setCode(response?.data?.item_code);
-        setName(response?.data?.item_name);
-        setDescription(response?.data?.description);
-        setPrice(response?.data?.price);
-        setPhoto(response?.data?.photo);
-        setQuantity(response?.data?.quantity);
-        setUpdateItem(response?.data?._id);
         console.log(response?.data?._id);
+        setUpdateItem(response?.data?._id);
+        const yearOfManufacture = new Date(response?.data?.YOM);
+        const lastServiceDate = new Date(response?.data?.last_service_date);
+        const nextServiceDate = new Date(response?.data?.next_service_date);
+        if (
+          yearOfManufacture != undefined ||
+          lastServiceDate != undefined ||
+          nextServiceDate != undefined
+        ) {
+          setIsOpen(true);
+          setCode(response?.data?.Id);
+          setName(response?.data?.name);
+          setType(response?.data?.type);
+          setYear(yearOfManufacture);
+          setDimension(response?.data?.dimension);
+          setLastServiceDate(lastServiceDate);
+          setNextServiceDate(nextServiceDate);
+        }
+
+        console.log(response?.data);
       });
   }
   function updateItem(values) {
     const response = axios
-      .put(`http://localhost:8020/item/updateOne/${UpdateItem}`, {
-        item_code: values.code,
-        item_name: values.name,
-        description: values.description,
-        price: values.price,
-        quantity: values.quantity,
+      .put(`http://localhost:8020/equipment/updateOne/${UpdateItem}`, {
+        Id: values.code,
+        name: values.name,
+        type: type,
+        YOM: year,
+        dimension: values.dimension,
+        last_service_date: startDate,
+        next_service_date: endDate,
       })
       .then((response) => {
         toast.success("update Successful");
         setIsOpen(false);
-      });
+      }).catch(()=>{
+        toast.error("dd")
+      })
   }
 
   return (
@@ -470,9 +487,11 @@ export default function AllEquipment() {
             initialValues={{
               code: code,
               name: name,
-              description: description,
-              price: price,
-              quantity: quantity,
+              type: type,
+              yom: year,
+              dimension: dimension,
+              lastServiceDate: lastServiceDate,
+              nextServiceDate: nextServiceDate,
             }}
             validationSchema={validationSchema}
             onSubmit={updateItem}
@@ -482,7 +501,7 @@ export default function AllEquipment() {
                 <div className="flex-col w-full overflow-auto">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Item Code</p>
+                    <p className="font-semibold">Equipment Code</p>
                   </div>
                   <div className="ll">
                     {" "}
@@ -490,7 +509,7 @@ export default function AllEquipment() {
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="text"
                       name="code"
-                      setFieldValue={code}
+                      required={true}
                     />
                   </div>
 
@@ -502,7 +521,7 @@ export default function AllEquipment() {
                 <div className="flex-col w-full">
                   <div className="ll">
                     {" "}
-                    <p className="font-semibold">Item Name</p>
+                    <p className="font-semibold">Equipment Name </p>
                   </div>
                   <div className="ll">
                     {" "}
@@ -510,6 +529,7 @@ export default function AllEquipment() {
                       className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="text"
                       name="name"
+                      required={true}
                     />
                   </div>
 
@@ -521,58 +541,100 @@ export default function AllEquipment() {
                 </div>
                 <div className="flex-col w-full">
                   <div className="ll">
+                    <p className="font-semibold">Type</p>
+                  </div>
+                  <div className="ll">
+                    <select
+                      required={true}
+                      className="w-full outline-2 border p-3"
+                      value={type}
+                      onChange={(event) => {
+                        setType(event.target.value);
+                      }}
+                    >
+                      <option className="p-3" value="Treadmills">
+                        Treadmills
+                      </option>
+                      <option className="p-3" value="Rowing Machine">
+                        Rowing Machine
+                      </option>
+                      <option className="p-3" value="Dumbbell Set">
+                        Dumbbell Set
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div className="flex-col w-full">
+                  <div className="ll">
                     {" "}
-                    <p className="font-semibold">Description</p>
+                    <p className="font-semibold">Year Of Made</p>
+                  </div>
+                  <DatePicker
+                    selected={year}
+                    onChange={handleYearChange}
+                    dateFormat="yyyy"
+                    showYearPicker
+                    isClearable
+                    placeholderText="Select year"
+                    maxDate={maxDate}
+                    className="border p-3 my-2"
+                  />
+                </div>
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Dimension</p>
                   </div>
                   <div className="ll">
                     {" "}
                     <Field
-                      className="border border-grey-dark text-sm py-10 px-2 my-1  rounded-md w-full"
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
                       type="text"
-                      name="description"
+                      name="dimension"
+                      required={true}
                     />
                   </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="description"
-                  />
-                </div>
-                <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Price</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
-                      name="price"
-                    />
-                  </div>
-
-                  <ErrorMessage
-                    component="div"
-                    className="text-red-500 text-xs"
-                    name="price"
-                  />
                 </div>
 
                 <div className="flex-col w-full">
-                  <div className="ll">
-                    {" "}
-                    <p className="font-semibold">Quantity</p>
-                  </div>
-                  <div className="ll">
-                    {" "}
-                    <Field
-                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                      type="number"
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">last Service Date</p>
+                    </div>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                      maxDate={maxDate}
+                      isClearable
+                      className="border p-3 my-2"
+                    />
+
+                    <ErrorMessage
+                      component="div"
+                      className="text-red-500 text-xs"
                       name="quantity"
                     />
                   </div>
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="quantity"
+                  />
+                </div>
+
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">Next Service Date</p>
+                  </div>
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    minDate={maxDate}
+                    isClearable
+                    className="border p-3 my-2"
+                  />
 
                   <ErrorMessage
                     component="div"
