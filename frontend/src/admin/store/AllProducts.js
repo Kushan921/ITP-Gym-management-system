@@ -86,7 +86,7 @@ export default function AllProducts() {
         description: values.description,
         price: values.price,
         quantity: values.quantity,
-        image: "sss",
+        image: proImg,
       })
       .then(() => {
         toast.success("Added Successfully!!");
@@ -96,6 +96,57 @@ export default function AllProducts() {
         toast.error("error!!");
       });
   }
+
+  const [proImg, setProImg] = useState("");
+  // const [Category, setCategory] = useState("");
+  // //Image to Base64
+  const [File, setFile] = useState("");
+  const [Base64Url, setBase64Url] = useState("");
+  const getBase64 = (file) => {
+    return new Promise((resolve) => {
+      let fileInfo;
+      let baseURL = "";
+      // Make new FileReader
+      let reader = new FileReader();
+
+      // Convert the file to base64 text
+      reader.readAsDataURL(file);
+
+      // on reader load somthing...
+      reader.onload = () => {
+        // Make a fileInfo Object
+        console.log("Called", reader);
+        baseURL = reader.result;
+
+        console.log(baseURL);
+        setProImg(baseURL);
+        console.log("Base", proImg);
+        resolve(baseURL);
+      };
+      console.log(fileInfo);
+    });
+  };
+  const handleFileInputChange = (e) => {
+    debugger;
+    console.log(e.target.files[0]);
+    let { file } = File;
+
+    file = e.target.files[0];
+
+    getBase64(file)
+      .then((result) => {
+        file["base64"] = result;
+
+        console.log("File Is", file);
+        setBase64Url(result);
+        setFile(file);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setFile(e.target.file);
+  };
+
 
   function getOne(id) {
     const response = axios
@@ -198,7 +249,7 @@ export default function AllProducts() {
                   <td class="px-6 py-4">{item.description}</td>
                   <td class="px-6 py-4">{item.price}</td>
                   <td class="px-6 py-4">{item.quantity}</td>
-                  <td class="px-6 py-4">{item.image}</td>
+                  <td class="px-6 py-4"><img src={item.image} style={{width:"64px" , height:"64px"}}></img></td>
                   <td class="px-1 py-4 w-full justify-center flex gap-4">
                     <button
                       className="font-medium text-yellow-300 hover:text-yellow-100"
@@ -372,6 +423,29 @@ export default function AllProducts() {
                   />
                 </div>
 
+                <div className="flex-col w-full">
+                  <div className="ll">
+                    {" "}
+                    <p className="font-semibold">image</p>
+                  </div>
+                  <div className="ll">
+                    {" "}
+                    <Field
+                      className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                      type="file"
+                      accept=".png,.jpg,.jpeg"
+                      onChange={(e) => handleFileInputChange(e)}
+                      name="image"
+                    />
+                  </div>
+
+                  <ErrorMessage
+                    component="div"
+                    className="text-red-500 text-xs"
+                    name="image"
+                  />
+                </div>
+
                 <div className="w-full flex gap-2">
                   <button
                     className="bg-red-800 w-1/2 text-white py-3 hover:bg-red-500"
@@ -385,7 +459,7 @@ export default function AllProducts() {
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
                     type="submit"
                   >
-                    Update
+                    Add
                   </button>
                 </div>
               </Form>
@@ -407,6 +481,7 @@ export default function AllProducts() {
               description: description,
               price: price,
               quantity: quantity,
+              image : proImg
             }}
             validationSchema={validationSchema}
             onSubmit={updateItem}
