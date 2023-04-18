@@ -15,6 +15,8 @@ import Suppliments from "./userView/Suppliments/suppliments";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
+import AllTeam from "./admin/repairTeam/ViewTeam";
+
 function App() {
   return (
     <div>
@@ -33,6 +35,7 @@ function App() {
           <Route path="/about" exact element={<About/>}/>
           <Route path="/contact" exact element={<Contact/>}/>
           <Route path="/suppliments" exact element={<Suppliments/>}/>
+          <Route path="/team" exact element={<AllTeam/>}/>
           
         </Routes>
       </BrowserRouter>
