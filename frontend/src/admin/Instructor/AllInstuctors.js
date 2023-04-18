@@ -87,7 +87,7 @@ export default function AllInstructors() {
         age: values.age,
         gender: gender,
         email: values.email,
-        contact: values.contact,
+        contact: values.phone,
         password: values.password,
       })
       .then(() => {
