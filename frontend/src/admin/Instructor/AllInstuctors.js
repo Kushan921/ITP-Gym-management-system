@@ -85,7 +85,7 @@ export default function AllInstructors() {
         first_name: values.firstName,
         last_name: values.lastName,
         age: values.age,
-        gender: values.gender,
+        gender: gender,
         email: values.email,
         contact: values.contact,
         password: values.password,
