@@ -6,6 +6,7 @@ import AllProducts from "./store/AllProducts";
 import AllEquipment from "./equipment/AllEquipment";
 
 
+
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
   const [selectedField, setSelectedField] = useState("home");

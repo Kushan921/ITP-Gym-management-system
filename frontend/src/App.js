@@ -14,8 +14,6 @@ import Footer from "./userView/Footer/Footer";
 import Contact from "./userView/Contact";
 import About from "./userView/About";
 import Suppliments from "./userView/Suppliments/suppliments";
-
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
