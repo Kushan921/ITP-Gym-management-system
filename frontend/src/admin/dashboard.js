@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Instructor from "./Instructor/ViewInstructor";
 import { useNavigate } from "react-router-dom";
 import Members from "./members/ViewMembers";
 import AllProducts from "./store/AllProducts";
 import AllEquipment from "./equipment/AllEquipment";
 import AllInstructors from "./Instructor/AllInstuctors";
-
-
+import AllMembers from "./members/ViewMembers";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
@@ -154,9 +152,9 @@ export default function Sidebar() {
               </li>
               <li className="rounded-sm">
                 <button
-                 onClick={()=>{
+                  onClick={() => {
                     navigate("/login");
-                 }}
+                  }}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
                   <svg
@@ -209,19 +207,10 @@ export default function Sidebar() {
             </div>
           </div>
         ) : null}
-        {selectedField === "instructors" ? (
-          <AllInstructors/>
-        ) : null}
-          {selectedField === "members" ? (
-          <Members/>
-        ) : null}
-          {selectedField === "store" ? (
-          <AllProducts/>
-        ) : null}
-          {selectedField === "equipment" ? (
-          <AllEquipment/>
-        ) : null}
-      
+        {selectedField === "instructors" ? <AllInstructors /> : null}
+        {selectedField === "members" ? <AllMembers /> : null}
+        {selectedField === "store" ? <AllProducts /> : null}
+        {selectedField === "equipment" ? <AllEquipment /> : null}
       </div>
     </div>
   );
