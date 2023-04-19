@@ -243,7 +243,7 @@ export default function Register() {
                 "
                   type="submit"
                 >
-                  Login
+                  Register
                 </button>
                 <div className="text-center mt-3">
                   <a

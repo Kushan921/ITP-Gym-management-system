@@ -23,7 +23,7 @@ function Suppliments() {
       <Header />
       <section className="w-full m-10">
         <div>
-          <center><h2 className="font-semibold text-3xl">Supplements</h2></center>
+          <center><h2 className="font-semibold text-3xl">Store</h2></center>
         </div>
         <div className="grid grid-cols-4 gap-2 sm:w-full h-full overflow-auto">
           {store.map((item) => (

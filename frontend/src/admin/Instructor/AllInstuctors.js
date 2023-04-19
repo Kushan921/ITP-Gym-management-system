@@ -135,7 +135,7 @@ export default function AllInstructors() {
   return (
     <section className="table-auto overflow-y-scroll h-screen pb-10">
       <div className="w-full bg-gray-100 py-10 text-center">
-        <h1 className="text-2xl">Instructor Details</h1>
+        <h1 className="text-2xl">Trainer Details</h1>
       </div>
       <div className="w-full flex flex-row-reverse px-10 mt-10">
         <button
