@@ -387,7 +387,7 @@ export default function AllEquipment() {
                     isClearable
                     placeholderText="Select year"
                     maxDate={maxDate}
-                    className="border p-3 my-2"
+                    className="border p-3 my-2 rounded-md w-full"
                   />
                 </div>
                 <div className="flex-col w-full">
@@ -417,7 +417,7 @@ export default function AllEquipment() {
                       onChange={(date) => setStartDate(date)}
                       maxDate={maxDate}
                       isClearable
-                      className="border p-3 my-2"
+                      className="border p-3 my-2 rounded-md w-full"
                     />
 
                     <ErrorMessage
@@ -443,7 +443,7 @@ export default function AllEquipment() {
                     onChange={(date) => setEndDate(date)}
                     minDate={maxDate}
                     isClearable
-                    className="border p-3 my-2"
+                    className="border p-3 my-2 rounded-md w-full"
                   />
 
                   <ErrorMessage
