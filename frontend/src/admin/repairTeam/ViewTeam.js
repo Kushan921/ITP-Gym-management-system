@@ -41,6 +41,19 @@ export default function AllTeam() {
   const validationSchema = Yup.object().shape({
     team_name: Yup.string().required("Required"),
     specialization: Yup.string().required("Required"),
+    contact: Yup.string()
+      .matches(/^0\d{9}$/, {
+        message: "Phone number must start with 0 and have exactly 10 digits",
+      })
+      .required("Phone number is required"),
+      NoOfPeople: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+      hourPrice: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
   });
 
   useEffect(() => {
@@ -54,7 +67,7 @@ export default function AllTeam() {
         }
       })
       .catch((error) => toast.error(error));
-  }, []);
+  }, [items]);
 
   const deleteItem = (id) => {
     axios
