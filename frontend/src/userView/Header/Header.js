@@ -22,7 +22,7 @@ function Header() {
                     </a>
                     </li>
                     <li>
-                    <a href="/sessions" className="hover:text-gray-400">
+                    <a href="/session" className="hover:text-gray-400">
                         Sessions
                     </a>
                     </li>

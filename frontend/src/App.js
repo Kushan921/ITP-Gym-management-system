@@ -12,6 +12,7 @@ import Footer from "./userView/Footer/Footer";
 import Contact from "./userView/Contact";
 import About from "./userView/About";
 import Suppliments from "./userView/Suppliments/suppliments";
+import Session from "./userView/Session/Session";
 import AllTeam from "./admin/repairTeam/ViewTeam";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/about" exact element={<About/>}/>
           <Route path="/contact" exact element={<Contact/>}/>
           <Route path="/suppliments" exact element={<Suppliments/>}/>
+          <Route path="/session" exact element={<Session/>}/>
           <Route path="/repair" exact element={<AllTeam/>}/>
           
         </Routes>
