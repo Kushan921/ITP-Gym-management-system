@@ -107,7 +107,7 @@ export default function AllMembers() {
         setAge(response?.data?.age);
         setGender(response?.data?.gender);
         setEmail(response?.data?.email);
-        setPassword(response?.data?.quantity);
+        setPassword(response?.data?.password);
         setPhone(response?.data?.contact);
         setUpdateItem(response?.data?._id);
         console.log(response?.data?._id);
