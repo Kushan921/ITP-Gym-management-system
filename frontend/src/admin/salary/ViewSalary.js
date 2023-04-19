@@ -527,7 +527,7 @@ export default function AllSalary() {
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
                     type="submit"
                   >
-                    Create
+                    Update
                   </button>
                 </div>
               </Form>

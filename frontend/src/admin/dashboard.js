@@ -179,7 +179,7 @@ export default function Sidebar() {
               </li>{" "}
               <li className="rounded-sm">
                 <button
-                  onClick={() => setSelectedField("store")}
+                  onClick={() => setSelectedField("salary")}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
                   <svg
