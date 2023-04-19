@@ -122,6 +122,9 @@ export default function Register() {
                         setGender(event.target.value);
                       }}
                     >
+                      <option className="p-3" value="">
+                          -select-
+                        </option>
                       <option className="p-3" value="male">
                         Male
                       </option>
