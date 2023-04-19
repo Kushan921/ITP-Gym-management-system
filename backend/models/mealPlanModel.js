@@ -6,10 +6,6 @@ const MealPlanSchema = new Schema({
         type : String,
         required: false
     },
-    empName: {
-        type: String,
-        required: true
-    },
     age : {
         type : Number,
         required: true
@@ -22,7 +18,19 @@ const MealPlanSchema = new Schema({
         type : String,
         required: true
     },
-    meals : {
+    height: {
+        type : String,
+        required: true
+    },
+    dietTemplate : {
+        type : String,
+        required: true
+    },
+    healtLabel : {
+        type : String,
+        required: true
+    },
+    dailyMeals : {
         type : String,
         required: true
     }

@@ -7,20 +7,24 @@ let  MealPlan = require("../models/mealPlanModel")
 //http://localhost:8020/meal/add
 router.route("/add").post((req,res)=>{
     const empId = req.body.empId;
-    const empName = req.body.empName;
     const age = req.body.age;
     const gender = req.body.gender;
     const weight = req.body.weight;
-    const meals = req.body.meals;
+    const height = req.body.height;
+    const dietTemplate = req.body.dietTemplate;
+    const healtLabel = req.body.healtLabel;
+    const dailyMeals = req.body.dailyMeals;
 
 
     const newMealPlan = new MealPlan({
         empId,
-        empName,
         age,
         gender,
         weight,
-        meals
+        height,
+        dietTemplate,
+        healtLabel,
+        dailyMeals
 
     })
 
@@ -31,7 +35,7 @@ router.route("/add").post((req,res)=>{
     })
 })
 
-//fetch mela plans
+//fetch meal plans
 //http://localhost:8020/meal/
 router.route("/").get((req,res)=>{
     MealPlan.find().then((item)=>{
@@ -45,15 +49,17 @@ router.route("/").get((req,res)=>{
 //http://localhost:8090/meal/update/:id
 router.route("/update/:id").put(async (req,res)=>{
     let mealPlanId = req.params.id;
-    const {empId,empName,age,gender,weight,meals} = req.body;
+    const {empId,age,gender,weight,height,dietTemplate,healtLabel,dailyMeals} = req.body;
 
     const updateMealPlan = {
         empId,
-        empName,
         age,
         gender,
         weight,
-        meals
+        height,
+        dietTemplate,
+        healtLabel,
+        dailyMeals
 
     }
 
@@ -70,11 +76,13 @@ router.route("/updateOne/:id").put(async (req, res) => {
     let mealPlan = await MealPlan.findById(req.params.id);
     const data = {
         empId: req.body.empId || MealPlan.empId,
-        empName: req.body.empName || MealPlan.empName,
         age: req.body.age || MealPlan.age,
         gender: req.body.gender || MealPlan.gender,
         weight: req.body.weight || MealPlan.weight,
-        meals: req.body.meals || MealPlan.meals
+        height: req.body.height || MealPlan.height,
+        dietTemplate: req.body.dietTemplate || MealPlan.dietTemplate,
+        healtLabel: req.body.healtLabel || MealPlan.healtLabel,
+        dailyMeals: req.body.dailyMeals || MealPlan.dailyMeals
 
     };
     mealPlan = await MealPlan.findByIdAndUpdate(req.params.id, data, { new: true });
