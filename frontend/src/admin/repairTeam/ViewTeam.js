@@ -392,7 +392,7 @@ export default function AllTeam() {
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
                     type="submit"
                   >
-                    Update
+                    Create
                   </button>
                 </div>
               </Form>
