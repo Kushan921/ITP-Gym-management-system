@@ -255,7 +255,7 @@ export default function AllSessions() {
                       onClick={() => {
                         if (
                           window.confirm(
-                            "Are you sure you want to delete this Member ?"
+                            "Are you sure you want to delete this Session ?"
                           )
                         ) {
                           deleteItem(item._id);

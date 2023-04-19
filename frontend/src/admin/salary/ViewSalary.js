@@ -244,7 +244,7 @@ export default function AllSalary() {
                       onClick={() => {
                         if (
                           window.confirm(
-                            "Are you sure you want to delete this Member ?"
+                            "Are you sure you want to delete this Salary ?"
                           )
                         ) {
                           deleteItem(item._id);
