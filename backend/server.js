@@ -53,9 +53,9 @@ app.use("/salary",SalaryRouter);
 const EquipmentRouter = require("./routes/equipmentRoute");
 app.use("/equipment",EquipmentRouter);
 
-//payment
-const PaymentRouter = require("./routes/paymentRoute");
-app.use("/payment",PaymentRouter);
+//meal plan
+const MealPlanRouter = require("./routes/mealPlanRoute");
+app.use("/meal",MealPlanRouter);
 
 //session
 const SessionRouter = require("./routes/sessionRoute");

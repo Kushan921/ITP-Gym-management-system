@@ -1,37 +1,34 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const PaymentSchema = new Schema({
-    Id : {
+const MealPlanSchema = new Schema({
+    empId : {
         type : String,
         required: false
     },
-    Name: {
+    empName: {
         type: String,
         required: true
     },
-    PhoneNumber : {
-        type : String,
-        required: true
-    },
-    CardNumber: {
-        type : String,
-        required: true
-    },
-    CVV : {
-        type : String,
-        required: true
-    },
-    ExpiaryDate : {
-        type : String,
-        required: true
-    },
-    TotlePrice : {
+    age : {
         type : Number,
         required: true
+    },
+    gender: {
+        type : String,
+        required: true
+    },
+    weight: {
+        type : String,
+        required: true
+    },
+    meals : {
+        type : String,
+        required: true
     }
+   
 })
 
-//salary table and path
-const Payment = mongoose.model("payment",PaymentSchema);
-module.exports = Payment;
+//meal plan table and path
+const MealPlan = mongoose.model("mealPlan",MealPlanSchema);
+module.exports = MealPlan;
