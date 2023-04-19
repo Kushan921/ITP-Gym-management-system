@@ -41,6 +41,19 @@ export default function AllTeam() {
   const validationSchema = Yup.object().shape({
     team_name: Yup.string().required("Required"),
     specialization: Yup.string().required("Required"),
+    contact: Yup.string()
+      .matches(/^0\d{9}$/, {
+        message: "Phone number must start with 0 and have exactly 10 digits",
+      })
+      .required("Phone number is required"),
+      NoOfPeople: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+      hourPrice: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
   });
 
   useEffect(() => {
@@ -74,7 +87,7 @@ export default function AllTeam() {
       .post(`http://localhost:8020/repair/add`, {
         team_name: values.team_name,
         specialization: values.specialization,
-        description: description,
+        description: values.description,
         NoOfPeople: values.NoOfPeople,
         hourPrice: values.hourPrice,
         contact: values.contact,
@@ -108,7 +121,7 @@ export default function AllTeam() {
       .put(`http://localhost:8020/repair/updateOne/${UpdateItem}`, {
         team_name: values.team_name,
         specialization: values.specialization,
-        description: description,
+        description: values.description,
         NoOfPeople: values.NoOfPeople,
         hourPrice: values.hourPrice,
         contact: values.contact,
