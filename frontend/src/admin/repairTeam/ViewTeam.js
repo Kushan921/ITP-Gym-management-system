@@ -31,7 +31,6 @@ export default function AllTeam() {
   const [UpdateItem, setUpdateItem] = useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const [addNewModal, setIsNewOpen] = useState(false);
-  const [gender, setGender] = React.useState(null);
   const initialValues = {
     code: "",
     name: "",
@@ -39,19 +38,10 @@ export default function AllTeam() {
     quantity: 0,
   };
 
-  // const validationSchema = Yup.object().shape({
-  //   age: Yup.number().required("Required Age"),
-  //   email: Yup.string().email("Invalid email address").required("Required"),
-  //   phone: Yup.string()
-  //     .matches(/^0\d{9}$/, {
-  //       message: "Phone number must start with 0 and have exactly 10 digits",
-  //     })
-  //     .required("Phone number is required"),
-  //   password: Yup.string().required("Required Password"),
-  //   confirmPassword: Yup.string()
-  //     .oneOf([Yup.ref("password")], "Passwords must match")
-  //     .required("Required"),
-  // });
+  const validationSchema = Yup.object().shape({
+    team_name: Yup.string().required("Required"),
+    specialization: Yup.string().required("Required"),
+  });
 
   useEffect(() => {
     axios
@@ -115,7 +105,7 @@ export default function AllTeam() {
   }
   function updateItem(values) {
     const response = axios
-      .put(`http://localhost:8020/user/repair/${UpdateItem}`, {
+      .put(`http://localhost:8020/repair/${UpdateItem}`, {
         team_name: values.team_name,
         specialization: values.specialization,
         description: description,
@@ -271,7 +261,7 @@ export default function AllTeam() {
           {" "}
           <Formik
             initialValues={initialValues}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={AddProduct}
           >
             {({ errors, touched }) => (
@@ -421,13 +411,12 @@ export default function AllTeam() {
             initialValues={{
               team_name: team_name,
               specialization: specialization,
-              gender: gender,
               description: description,
               NoOfPeople: NoOfPeople,
               hourPrice: hourPrice,
-              contact: contact,
+              contact: contact
             }}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={updateItem}
           >
             {({ errors, touched }) => (
@@ -448,22 +437,8 @@ export default function AllTeam() {
                       />
                     </div>
                   </div>
-                  {/* <div className="flex-col w-full">
-                    <div className="ll">
-                      {" "}
-                      <p className="font-semibold">Last Name</p>
-                    </div>
-                    <div className="ll">
-                      {" "}
-                      <Field
-                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
-                        type="text"
-                        name="lastName"
-                        required={true}
-                      />
-                    </div>
-                  </div> */}
                 </div>
+                
                 <div className="flex gap-4">
                   <div className="flex-col w-full">
                     <div className="ll">

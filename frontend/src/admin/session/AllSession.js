@@ -12,7 +12,7 @@ const customStyles = {
   content: {
     top: "50%",
     left: "50%",
-    right: "auto",
+    right: "20%",
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
@@ -368,7 +368,7 @@ export default function AllSessions() {
                       onChange={(date) => setStartDate(date)}
                       minDate={maxDate}
                       isClearable
-                      className="border p-3 my-2"
+                      className="border p-3 my-2 rounded-md w-full"
                     />
                   </div>
                 </div>
@@ -385,7 +385,7 @@ export default function AllSessions() {
                       showTimeSelect
                       dateFormat="h:mm aa"
                       timeIntervals={15}
-                      className="border p-3 my-2"
+                      className="border p-3 my-2 rounded-md w-full"
                     />
 
                     <ErrorMessage
@@ -413,7 +413,7 @@ export default function AllSessions() {
                       showTimeSelect
                       dateFormat="h:mm aa"
                       timeIntervals={15}
-                      className="border p-3 my-2"
+                      className="border p-3 my-2 rounded-md w-full"
                     />
                   </div>
                 </div>
@@ -593,7 +593,7 @@ export default function AllSessions() {
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
                     type="submit"
                   >
-                    Add
+                    Update
                   </button>
                 </div>
               </Form>

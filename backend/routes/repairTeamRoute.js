@@ -42,7 +42,7 @@ router.route("/").get((req,res)=>{
 })
 
 //update team
-//http://localhost:8090/repair/:team_name
+//http://localhost:8020/repair/:id
 router.route("/update/:id").put(async (req,res)=>{
     let teamId = req.params.id;
     const {team_name,specialization ,description,NoOfPeople,hourPrice,contact} = req.body;
