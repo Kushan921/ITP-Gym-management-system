@@ -27,7 +27,7 @@ export default function MealPlan() {
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [dietTemplate, setDietTemplate] = useState("");
-  const [healtLabel, setHealtLabel] = useState("");
+  const [healthLabel, setHealthLabel] = useState("");
   const [dailyMeals, setDailyMeals] = useState("");
   const [UpdateModal, setUpdateModal] = useState(false);
   const [UpdateItem, setUpdateItem] = useState("");
@@ -85,12 +85,12 @@ export default function MealPlan() {
       .post(`http://localhost:8020/meal/add`, {
         empId: values.empId,
         age: values.age,
-        gender: values.gender,
-        weight: weight,
+        gender: gender,
+        weight: values.weight,
         height: values.height,
-        dietTemplate: values.dietTemplate,
-        healtLabel: values.healtLabel,
-        dailyMeals: values.dailyMeals,
+        dietTemplate: dietTemplate,
+        healtLabel: healthLabel,
+        dailyMeals: dailyMeals,
       })
       .then(() => {
         toast.success("Added Successfully!!");
@@ -112,7 +112,7 @@ export default function MealPlan() {
         setHeight(response?.data?.height);
         setWeight(response?.data?.weight);
         setDietTemplate(response?.data?.dietTemplate);
-        setHealtLabel(response?.data?.healtLabel);
+        setHealthLabel(response?.data?.healtLabel);
         setDailyMeals(response?.data?.dailyMeals);
         setUpdateItem(response?.data?._id);
         console.log(response?.data?._id);
@@ -126,9 +126,9 @@ export default function MealPlan() {
         gender: gender,
         weight: values.weight,
         height: values.height,
-        dietTemplate: values.dietTemplate,
-        healtLabel : values.healtLabel,
-        dailyMeals : values.dailyMeals
+        dietTemplate: dietTemplate,
+        healtLabel :healthLabel,
+        dailyMeals :dailyMeals
       })
       .then((response) => {
         toast.success("update Successful");
@@ -172,7 +172,7 @@ export default function MealPlan() {
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" class="px-6 py-3">
-                  Employee Id
+                 User Id
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Age
@@ -292,7 +292,7 @@ export default function MealPlan() {
                   <div className="flex-col w-full">
                     <div className="ll">
                       {" "}
-                      <p className="font-semibold">Employee Id</p>
+                      <p className="font-semibold">User Id</p>
                     </div>
                     <div className="ll">
                       {" "}
@@ -372,6 +372,26 @@ export default function MealPlan() {
                       name="weight"
                     />
                   </div>
+                  <div className="flex-col w-full">
+                    <div className="ll">
+                      {" "}
+                      <p className="font-semibold">height</p>
+                    </div>
+                    <div className="ll">
+                      {" "}
+                      <Field
+                        className="border border-grey-dark text-sm p-3 my-1  rounded-md w-full"
+                        type="number"
+                        name="height"
+                      />
+                    </div>
+
+                    <ErrorMessage
+                      component="div"
+                      className="text-red-500 text-xs"
+                      name="height"
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-4">
@@ -417,15 +437,15 @@ export default function MealPlan() {
                 <div className="flex gap-4">
                   <div className="flex-col w-full">
                     <div className="ll">
-                      <p className="font-semibold">Healt Label</p>
+                      <p className="font-semibold">Health Label</p>
                     </div>
                     <div className="ll">    
                       <select
                         className="w-full outline-2 border p-3"
-                        value={healtLabel}
+                        value={healthLabel}
                         required={true}
                         onChange={(event) => {
-                          setHealtLabel(event.target.value);
+                          setHealthLabel(event.target.value);
                         }}
                       >
                         <option className="p-3" value="">
@@ -530,7 +550,7 @@ export default function MealPlan() {
                 weight: weight,
                 height: height,
                 dietTemplate: dietTemplate,
-                healtLabel : healtLabel,
+                healtLabel : healthLabel,
                 dailyMeals : dailyMeals
             }}
             // validationSchema={validationSchema}
@@ -689,15 +709,15 @@ export default function MealPlan() {
                 <div className="flex gap-4">
                   <div className="flex-col w-full">
                     <div className="ll">
-                      <p className="font-semibold">Healt Label</p>
+                      <p className="font-semibold">Health Label</p>
                     </div>
                     <div className="ll">    
                       <select
                         className="w-full outline-2 border p-3"
-                        value={healtLabel}
+                        value={healthLabel}
                         required={true}
                         onChange={(event) => {
-                          setHealtLabel(event.target.value);
+                          setHealthLabel(event.target.value);
                         }}
                       >
                         <option className="p-3" value="">
