@@ -7,6 +7,9 @@ import AllInstructors from "./Instructor/AllInstuctors";
 import AllMembers from "./members/ViewMembers";
 import AllSessions from "./session/AllSession";
 import AllSalary from "./salary/ViewSalary";
+import AllTeam from "./repairTeam/ViewTeam";
+
+
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
@@ -176,7 +179,7 @@ export default function Sidebar() {
               </li>{" "}
               <li className="rounded-sm">
                 <button
-                  onClick={() => setSelectedField("salary")}
+                  onClick={() => setSelectedField("store")}
                   className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
                 >
                   <svg
@@ -194,6 +197,50 @@ export default function Sidebar() {
                     />
                   </svg>
                   <span className="text-gray-100">Salary</span>
+                </button>
+              </li>
+              <li className="rounded-sm">
+                <button
+                  onClick={() => setSelectedField("repair")}
+                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-gray-100"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
+                  </svg>
+                  <span className="text-gray-100">Repair Team</span>
+                </button>
+              </li>
+              <li className="rounded-sm">
+                <button
+                  onClick={() => setSelectedField("payment")}
+                  className="flex items-center p-2 space-x-3 rounded-md hover:bg-slate-500 w-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6 text-gray-100"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
+                  </svg>
+                  <span className="text-gray-100">Payment</span>
                 </button>
               </li>
               <li className="rounded-sm">
@@ -259,6 +306,8 @@ export default function Sidebar() {
         {selectedField === "equipment" ? <AllEquipment /> : null}
         {selectedField === "sessions" ? <AllSessions /> : null}
         {selectedField === "salary" ? <AllSalary /> : null}
+        {selectedField === "repair" ? <AllTeam /> : null}
+        {selectedField === "payment" ? <AllSalary /> : null}
       </div>
     </div>
   );

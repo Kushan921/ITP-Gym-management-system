@@ -12,10 +12,11 @@ import Footer from "./userView/Footer/Footer";
 import Contact from "./userView/Contact";
 import About from "./userView/About";
 import Suppliments from "./userView/Suppliments/suppliments";
+import AllTeam from "./admin/repairTeam/ViewTeam";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
-import AllTeam from "./admin/repairTeam/ViewTeam";
+
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/about" exact element={<About/>}/>
           <Route path="/contact" exact element={<Contact/>}/>
           <Route path="/suppliments" exact element={<Suppliments/>}/>
-          <Route path="/team" exact element={<AllTeam/>}/>
+          <Route path="/repair" exact element={<AllTeam/>}/>
           
         </Routes>
       </BrowserRouter>
