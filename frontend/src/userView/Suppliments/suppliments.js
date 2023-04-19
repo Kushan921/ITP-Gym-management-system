@@ -23,7 +23,7 @@ function Suppliments() {
       <Header />
       <section className="w-full m-10">
         <div>
-          <h2>Supplements</h2>
+          <center><h2 className="font-semibold text-3xl">Supplements</h2></center>
         </div>
         <div className="grid grid-cols-4 gap-2 sm:w-full h-full overflow-auto">
           {store.map((item) => (
@@ -38,11 +38,14 @@ function Suppliments() {
                 <div class="p-5">
                   <a href="#">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                      {item.item_code}
+                      {item.item_name}
                     </h5>
                   </a>
                   <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                     {item.description}
+                  </p>
+                  <p class="mb-3 font-normal text-gray-100 dark:text-gray-400 text-lg" >
+                    Rs.{item.price}
                   </p>
                   <a
                     href="#"
