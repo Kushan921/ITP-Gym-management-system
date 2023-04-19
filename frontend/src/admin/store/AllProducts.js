@@ -280,7 +280,7 @@ export default function AllProducts() {
                       onClick={() => {
                         if (
                           window.confirm(
-                            "Are you sure you want to delete this Member ?"
+                            "Are you sure you want to delete this Item ?"
                           )
                         ) {
                           deleteItem(item._id);

@@ -1,16 +1,15 @@
 import *  as React from "react";
-
 import Link from "@mui/material/Link";
-
 import Typography from "@mui/material/Typography";
-
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import login from "../images/login.jpg";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
+  
   return (
     <Typography
       variant="body2"
@@ -31,6 +30,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
+  let navigate = useNavigate();
   const [gender, setGender] = React.useState(null);
   const initialValues = {
     email: "",
@@ -72,6 +72,7 @@ export default function Register() {
     )
     .then((response) => {
       alert("user Added")
+      navigate("/home")
     });
   };
 
