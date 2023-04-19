@@ -265,7 +265,7 @@ export default function AllEquipment() {
                       onClick={() => {
                         if (
                           window.confirm(
-                            "Are you sure you want to delete this Member ?"
+                            "Are you sure you want to delete this Equipment ?"
                           )
                         ) {
                           deleteItem(item._id);
