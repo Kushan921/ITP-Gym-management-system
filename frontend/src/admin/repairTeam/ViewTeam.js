@@ -54,7 +54,7 @@ export default function AllTeam() {
         }
       })
       .catch((error) => toast.error(error));
-  }, [items]);
+  }, []);
 
   const deleteItem = (id) => {
     axios
@@ -74,7 +74,7 @@ export default function AllTeam() {
       .post(`http://localhost:8020/repair/add`, {
         team_name: values.team_name,
         specialization: values.specialization,
-        description: description,
+        description: values.description,
         NoOfPeople: values.NoOfPeople,
         hourPrice: values.hourPrice,
         contact: values.contact,
@@ -108,7 +108,7 @@ export default function AllTeam() {
       .put(`http://localhost:8020/repair/updateOne/${UpdateItem}`, {
         team_name: values.team_name,
         specialization: values.specialization,
-        description: description,
+        description: values.description,
         NoOfPeople: values.NoOfPeople,
         hourPrice: values.hourPrice,
         contact: values.contact,
