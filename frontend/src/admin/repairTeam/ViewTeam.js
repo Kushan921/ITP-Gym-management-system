@@ -105,7 +105,7 @@ export default function AllTeam() {
   }
   function updateItem(values) {
     const response = axios
-      .put(`http://localhost:8020/repair/${UpdateItem}`, {
+      .put(`http://localhost:8020/repair/updateOne/${UpdateItem}`, {
         team_name: values.team_name,
         specialization: values.specialization,
         description: description,
