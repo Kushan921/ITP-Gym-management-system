@@ -40,19 +40,16 @@ export default function MealPlan() {
     quantity: 0,
   };
 
-//   const validationSchema = Yup.object().shape({
-//     age: Yup.number().required("Required Age"),
-//     email: Yup.string().email("Invalid email address").required("Required"),
-//     phone: Yup.string()
-//       .matches(/^0\d{9}$/, {
-//         message: "Phone number must start with 0 and have exactly 10 digits",
-//       })
-//       .required("Phone number is required"),
-//     password: Yup.string().required("Required Password"),
-//     confirmPassword: Yup.string()
-//       .oneOf([Yup.ref("password")], "Passwords must match")
-//       .required("Required"),
-//   });
+  const validationSchema = Yup.object().shape({
+    weight: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+      height: Yup.number()
+      .required("Required")
+      .positive("Must be greater than zero")
+      .integer("Must be an integer"),
+  });
 
   useEffect(() => {
     axios
@@ -127,8 +124,8 @@ export default function MealPlan() {
         weight: values.weight,
         height: values.height,
         dietTemplate: dietTemplate,
-        healtLabel :healthLabel,
-        dailyMeals :dailyMeals
+        healtLabel: healthLabel,
+        dailyMeals: dailyMeals,
       })
       .then((response) => {
         toast.success("update Successful");
@@ -172,7 +169,7 @@ export default function MealPlan() {
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" class="px-6 py-3">
-                 User Id
+                  User Id
                 </th>
                 <th scope="col" class="px-6 py-3">
                   Age
@@ -283,7 +280,7 @@ export default function MealPlan() {
           {" "}
           <Formik
             initialValues={initialValues}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={AddProduct}
           >
             {({ errors, touched }) => (
@@ -325,7 +322,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Gender</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={gender}
@@ -351,7 +348,7 @@ export default function MealPlan() {
                       className="text-red-500 text-xs"
                       name="gender"
                     />
-                </div>
+                  </div>
                   <div className="flex-col w-full">
                     <div className="ll">
                       {" "}
@@ -399,7 +396,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Diet Template</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={dietTemplate}
@@ -439,7 +436,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Health Label</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={healthLabel}
@@ -479,7 +476,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Daily meals</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={dailyMeals}
@@ -544,16 +541,16 @@ export default function MealPlan() {
           {" "}
           <Formik
             initialValues={{
-                empId: empId,
-                age: age,
-                gender: gender,
-                weight: weight,
-                height: height,
-                dietTemplate: dietTemplate,
-                healtLabel : healthLabel,
-                dailyMeals : dailyMeals
+              empId: empId,
+              age: age,
+              gender: gender,
+              weight: weight,
+              height: height,
+              dietTemplate: dietTemplate,
+              healtLabel: healthLabel,
+              dailyMeals: dailyMeals,
             }}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={updateItem}
           >
             {({ errors, touched }) => (
@@ -621,7 +618,7 @@ export default function MealPlan() {
                       className="text-red-500 text-xs"
                       name="gender"
                     />
-                </div>
+                  </div>
 
                   <div className="flex-col w-full">
                     <div className="ll">
@@ -671,7 +668,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Diet Template</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={dietTemplate}
@@ -711,7 +708,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Health Label</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={healthLabel}
@@ -751,7 +748,7 @@ export default function MealPlan() {
                     <div className="ll">
                       <p className="font-semibold">Daily meals</p>
                     </div>
-                    <div className="ll">    
+                    <div className="ll">
                       <select
                         className="w-full outline-2 border p-3"
                         value={dailyMeals}
@@ -785,7 +782,6 @@ export default function MealPlan() {
                     />
                   </div>
                 </div>
-                
 
                 <div className="w-full flex gap-2">
                   <button
