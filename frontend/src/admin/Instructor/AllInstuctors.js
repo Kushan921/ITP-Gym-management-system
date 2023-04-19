@@ -109,7 +109,7 @@ export default function AllInstructors() {
         setAge(response?.data?.age);
         setGender(response?.data?.gender);
         setEmail(response?.data?.email);
-        setPassword(response?.data?.quantity);
+        setPassword(response?.data?.password);
         setPhone(response?.data?.contact);
         setUpdateItem(response?.data?._id);
         console.log(response?.data?._id);
@@ -461,7 +461,7 @@ export default function AllInstructors() {
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
                     type="submit"
                   >
-                    Update
+                    Add
                   </button>
                 </div>
               </Form>
