@@ -366,7 +366,7 @@ export default function AllTeam() {
                     {" "}
                     <Field
                       className="border border-grey-dark text-sm p-3 my-1 rounded-md w-full"
-                      type="password"
+                      type="text"
                       name="contact"
                     />
                   </div>

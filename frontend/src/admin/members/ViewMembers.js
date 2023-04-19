@@ -64,7 +64,7 @@ export default function AllMembers() {
         }
       })
       .catch((error) => toast.error(error));
-  }, [items]);
+  }, []);
 
   const deleteItem = (id) => {
     axios
