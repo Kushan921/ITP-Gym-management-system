@@ -14,6 +14,7 @@ import About from "./userView/About";
 import Suppliments from "./userView/Suppliments/suppliments";
 import Session from "./userView/Session/Session";
 import AllTeam from "./admin/repairTeam/ViewTeam";
+import MealPlan from "./admin/mealPlan/mealPlan";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/suppliments" exact element={<Suppliments/>}/>
           <Route path="/session" exact element={<Session/>}/>
           <Route path="/repair" exact element={<AllTeam/>}/>
+          <Route path="/meal" exact element={<MealPlan/>}/>
           
         </Routes>
       </BrowserRouter>
