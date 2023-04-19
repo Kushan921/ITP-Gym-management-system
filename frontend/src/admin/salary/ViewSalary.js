@@ -521,7 +521,7 @@ export default function AllSalary() {
                       setIsOpen(false);
                     }}
                   >
-                    close
+                    Close
                   </button>
                   <button
                     className="bg-green-800 w-1/2 text-white py-3 hover:bg-green-500"
